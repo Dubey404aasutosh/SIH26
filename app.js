@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     validate: function (numStr) {
       const sanitized = numStr.replace(/\s+/g, '');
       if (!/^\d{12}$/.test(sanitized)) return false;
-      
+
       let c = 0;
       const reversed = sanitized.split('').reverse();
       for (let i = 0; i < reversed.length; i++) {
@@ -506,6 +506,372 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('HASTA Risk Gating Alert: This is a HIGH-risk form submission action. A blocking modal halts execution until explicit user confirmation.');
     });
   }
+
+  /* ==========================================================================
+     10. SPLITTING.JS GRID CELL MATRIX HERO REVEAL ANIMATION (ss-16) + RIVE MASCOT
+     ========================================================================== */
+  const initHeroReveal = () => {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+
+    const heroTitles = hero.querySelectorAll('.hero_row_text > h1');
+    const heroSubTitles = hero.querySelectorAll('.hero_row_text > h4');
+    const heroSeparators = hero.querySelectorAll('.hero_row_separator');
+    const heroMedia = hero.querySelector('.hero_media');
+    const riveCanvas = document.getElementById('hero-rive-canvas');
+
+    let riveInstance = null;
+
+    // Load Rive interactive mascot animation from assets/mascot.riv
+    if (typeof rive !== 'undefined' && riveCanvas) {
+      try {
+        riveCanvas.width = riveCanvas.parentElement.clientWidth || window.innerWidth;
+        riveCanvas.height = riveCanvas.parentElement.clientHeight || window.innerHeight;
+
+        riveInstance = new rive.Rive({
+          src: 'assets/mascot.riv',
+          canvas: riveCanvas,
+          autoplay: true,
+          layout: new rive.Layout({
+            fit: rive.Fit.Cover,
+            alignment: rive.Alignment.Center,
+          }),
+          onLoad: () => {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            const w = riveCanvas.parentElement ? riveCanvas.parentElement.clientWidth : window.innerWidth;
+            const h = riveCanvas.parentElement ? riveCanvas.parentElement.clientHeight : window.innerHeight;
+            riveCanvas.width = w * dpr;
+            riveCanvas.height = h * dpr;
+            riveInstance.resizeDrawingSurfaceToCanvas();
+            if (riveInstance.stateMachineNames && riveInstance.stateMachineNames.length > 0) {
+              riveInstance.play(riveInstance.stateMachineNames[0]);
+            } else if (riveInstance.animationNames && riveInstance.animationNames.length > 0) {
+              riveInstance.play(riveInstance.animationNames);
+            }
+          },
+        });
+
+        window.addEventListener('resize', () => {
+          if (riveInstance && riveCanvas) {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            const w = riveCanvas.parentElement ? riveCanvas.parentElement.clientWidth : window.innerWidth;
+            const h = riveCanvas.parentElement ? riveCanvas.parentElement.clientHeight : window.innerHeight;
+            riveCanvas.width = w * dpr;
+            riveCanvas.height = h * dpr;
+            riveInstance.resizeDrawingSurfaceToCanvas();
+          }
+        });
+      } catch (err) {
+        console.warn('Rive mascot loading notice:', err);
+      }
+    }
+
+    // Split hero media into grid cells if data-rows configured
+    if (typeof Splitting === 'function' && heroMedia && heroMedia.hasAttribute('data-rows')) {
+      try {
+        Splitting({
+          target: heroMedia,
+          by: 'cells',
+          image: true,
+        });
+      } catch (e) {
+        console.warn('Splitting.js initialization notice:', e);
+      }
+    }
+
+    // Run GSAP Reveal Timeline
+    if (typeof gsap !== 'undefined') {
+      gsap.set(heroTitles, { y: '101%' });
+      gsap.set(heroSubTitles, { autoAlpha: 0 });
+      gsap.set(heroSeparators, { width: 0 });
+      if (riveCanvas) {
+        gsap.set(riveCanvas, { autoAlpha: 0 });
+      }
+
+      const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+
+      // Animate background Rive canvas in smoothly
+      if (riveCanvas) {
+        tl.to(
+          riveCanvas,
+          {
+            duration: 1.5,
+            autoAlpha: 1,
+            ease: 'power2.out',
+          },
+          0
+        );
+      }
+
+      tl.to(
+        heroTitles,
+        {
+          duration: 1.75,
+          y: 0,
+          stagger: 0.055,
+        },
+        0
+      )
+        .to(
+          heroSubTitles,
+          {
+            duration: 1,
+            autoAlpha: 1,
+            ease: 'expo.in',
+            stagger: 0.055,
+          },
+          0
+        )
+        .to(
+          heroSeparators,
+          {
+            duration: 1.75,
+            width: '100%',
+            stagger: 0.095,
+          },
+          0
+        );
+
+      const cells = hero.querySelectorAll('.cell');
+      if (cells.length > 0) {
+        tl.fromTo(
+          cells,
+          {
+            height: '0',
+            scale: 0.5,
+          },
+          {
+            duration: 1.25,
+            height: '100%',
+            scale: 1,
+            stagger: 0.025,
+            ease: 'expo.inOut',
+          },
+          0.5
+        );
+      }
+    }
+  };
+
+  initHeroReveal();
+
+  /* ==========================================================================
+     11. OBSCURA STAGGERED TEXT REVEAL OVERLAY MENU ANIMATION
+     ========================================================================== */
+  const initObscuraMenu = () => {
+    const menu = document.getElementById("obscura-menu");
+    const menuBg = menu ? menu.querySelector(".menu-bg") : null;
+    const menuItems = menu ? menu.querySelectorAll(".menu-item") : [];
+    const navToggler = document.getElementById("nav-toggler");
+
+    if (!menu || !navToggler) return;
+
+    // Helper: Split text into masked characters
+    const splitIntoMaskedChars = (element) => {
+      const text = element.textContent;
+      element.innerHTML = "";
+      const chars = [];
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const mask = document.createElement("span");
+        mask.className = "char-mask";
+        mask.style.display = "inline-block";
+        mask.style.overflow = "hidden";
+        mask.style.verticalAlign = "bottom";
+
+        const inner = document.createElement("span");
+        inner.className = "char";
+        inner.style.display = "inline-block";
+        inner.textContent = char === " " ? "\u00A0" : char;
+
+        mask.appendChild(inner);
+        element.appendChild(mask);
+        chars.push(inner);
+      }
+      return chars;
+    };
+
+    // Helper: Split text into masked word
+    const splitIntoMaskedWord = (element) => {
+      const text = element.textContent.trim();
+      element.innerHTML = "";
+      const mask = document.createElement("span");
+      mask.className = "word-mask";
+      mask.style.display = "inline-block";
+      mask.style.overflow = "hidden";
+      mask.style.verticalAlign = "bottom";
+
+      const inner = document.createElement("span");
+      inner.className = "word";
+      inner.style.display = "inline-block";
+      inner.textContent = text;
+
+      mask.appendChild(inner);
+      element.appendChild(mask);
+      return [inner];
+    };
+
+    // Wait for custom fonts to be ready before calculating natural widths
+    const setupMenuAnimation = () => {
+      const items = Array.from(menuItems).map((item) => {
+        const index = item.querySelector(".item-index");
+        const label = item.querySelector(".item-label");
+        const divider = item.querySelector(".item-divider");
+
+        const chars = splitIntoMaskedChars(label);
+        const [firstChar, ...trailingChars] = chars;
+
+        const trailingCharBox = document.createElement("span");
+        trailingCharBox.className = "item-body";
+        trailingCharBox.style.display = "inline-block";
+        trailingCharBox.style.whiteSpace = "nowrap";
+        trailingCharBox.style.overflow = "hidden";
+
+        trailingChars.forEach((char) => {
+          if (char.parentElement) {
+            trailingCharBox.appendChild(char.parentElement);
+          }
+        });
+        label.after(trailingCharBox);
+
+        // Natural width measured before setting width to 0
+        const bodyWidth = trailingCharBox.offsetWidth || trailingCharBox.scrollWidth;
+
+        const indexWord = index ? splitIntoMaskedWord(index) : [];
+
+        // Initial state setters via GSAP
+        if (typeof gsap !== "undefined") {
+          gsap.set([indexWord, firstChar], { yPercent: 100 });
+          gsap.set(trailingChars, { xPercent: 125 });
+          gsap.set(trailingCharBox, { width: 0 });
+          gsap.set(divider, { scaleY: 0 });
+        }
+
+        return { indexWord, firstChar, trailingChars, trailingCharBox, bodyWidth, divider };
+      });
+
+      // Master Animation Timeline Configuration (Dual-Velocity State Machine)
+      const tl = (typeof gsap !== "undefined")
+        ? gsap.timeline({
+            paused: true,
+            defaults: { ease: "power3.out" },
+            onReverseComplete: () => {
+              menu.classList.remove("is-menu-open");
+            },
+          })
+        : null;
+
+      if (tl) {
+        // Backdrop Reveal
+        tl.to(menuBg, { opacity: 1, duration: 0.75 }, 0);
+
+        // Staggered Item Animation Sequence
+        items.forEach(
+          ({ indexWord, firstChar, trailingChars, trailingCharBox, bodyWidth, divider }, i) => {
+            const startTime = 0.35 + i * 0.1;
+
+            tl.to([indexWord, firstChar], { yPercent: 0, duration: 0.75 }, startTime)
+              .to(
+                divider,
+                { scaleY: 1, duration: 0.9, ease: "power3.out" },
+                startTime + 0.05
+              )
+              .to(
+                trailingCharBox,
+                {
+                  width: bodyWidth,
+                  duration: 0.9,
+                  ease: "power4.inOut",
+                },
+                startTime + 0.18
+              )
+              .to(
+                trailingChars,
+                { xPercent: 0, duration: 0.75, stagger: 0.035 },
+                startTime + 0.35
+              );
+          }
+        );
+      }
+
+      // Button Character Flicker Effect Helper
+      function flickerTextTo(element, text) {
+        if (!element) return;
+        element.textContent = text;
+        if (typeof gsap === "undefined") return;
+
+        const textStr = text;
+        element.innerHTML = "";
+        const chars = [];
+        for (let c of textStr) {
+          const span = document.createElement("span");
+          span.textContent = c;
+          span.style.display = "inline-block";
+          element.appendChild(span);
+          chars.push(span);
+        }
+        gsap.fromTo(
+          chars,
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: 0.05,
+            ease: "power2.inOut",
+            overwrite: true,
+            stagger: { amount: 0.25, from: "random" },
+          }
+        );
+      }
+
+      // State Toggle
+      let isMenuOpen = false;
+
+      const toggleMenu = () => {
+        isMenuOpen = !isMenuOpen;
+        if (isMenuOpen) {
+          menu.classList.add("is-menu-open");
+          menu.setAttribute("aria-hidden", "false");
+          if (tl) {
+            tl.timeScale(1);
+            tl.play();
+          }
+        } else {
+          menu.setAttribute("aria-hidden", "true");
+          if (tl) {
+            tl.timeScale(1.65);
+            tl.reverse();
+          }
+        }
+        flickerTextTo(navToggler, isMenuOpen ? "Close" : "Menu");
+      };
+
+      navToggler.addEventListener("click", toggleMenu);
+
+      // Auto close when any link is clicked
+      menuItems.forEach((item) => {
+        item.addEventListener("click", () => {
+          if (isMenuOpen) {
+            toggleMenu();
+          }
+        });
+      });
+
+      // Escape key to close
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && isMenuOpen) {
+          toggleMenu();
+        }
+      });
+    };
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(setupMenuAnimation);
+    } else {
+      setupMenuAnimation();
+    }
+  };
+
+  initObscuraMenu();
 
 });
 
