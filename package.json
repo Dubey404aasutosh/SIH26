@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "PRAHARI — Privacy-Preserving Agentic Vision Showcase for SIH 2026",
   "scripts": {
+    "build": "echo 'Static build complete'",
     "dev": "npx -y serve . -l 3000",
     "start": "npx -y serve . -l 3000",
     "serve": "npx -y serve . -l 3000"

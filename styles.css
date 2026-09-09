@@ -480,12 +480,13 @@ code, pre, .font-mono {
 }
 
 .hero-subtitle {
-  font-family: var(--font-display);
-  font-size: clamp(16px, 2vw, 19px);
-  font-weight: 400;
+  font-family: var(--font-body) !important;
+  font-size: clamp(17px, 2vw, 20px);
+  font-weight: 500 !important;
+  text-transform: none !important;
   line-height: 1.55;
-  color: var(--warm-coffee);
-  max-width: 780px;
+  color: var(--color-obsidian-muted);
+  max-width: 820px;
   margin-bottom: 36px;
 }
 
@@ -792,15 +793,16 @@ code, pre, .font-mono {
   line-height: 1.18;
   color: var(--cocoa-ink);
   margin-bottom: 14px;
-  text-transform: lowercase;
+  text-transform: uppercase;
 }
 
 .section-subtitle {
-  font-family: var(--font-display);
-  font-size: clamp(15px, 1.6vw, 18px);
-  font-weight: 400;
+  font-family: var(--font-body) !important;
+  font-size: clamp(16px, 1.8vw, 19px);
+  font-weight: 500 !important;
+  text-transform: none !important;
   line-height: 1.55;
-  color: var(--warm-coffee);
+  color: var(--color-obsidian-muted);
 }
 
 /* --------------------------------------------------------------------------
