@@ -873,5 +873,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initObscuraMenu();
 
+  /* ==========================================================================
+     17. STICKY CARDS SCROLL ANIMATION (GSAP + SCROLLTRIGGER + LENIS)
+     ========================================================================== */
+  const initStickyCardsAnimation = () => {
+    const cardsContainer = document.querySelector("#pillars-cards");
+    const cards = gsap.utils.toArray("#pillars-cards .card");
+
+    if (!cardsContainer || !cards.length) return;
+    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
+
+    // 1. Initialize Lenis Smooth Scroll Engine (if Lenis is loaded)
+    if (typeof Lenis !== "undefined") {
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+      });
+
+      lenis.on("scroll", ScrollTrigger.update);
+
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    // 2. Register GSAP ScrollTrigger Plugin
+    gsap.registerPlugin(ScrollTrigger);
+
+    // 3. Pin ALL Cards & Animate Card Stack Upward Shift
+    cards.forEach((card, index) => {
+      const isLastCard = index === cards.length - 1;
+      const cardInner = card.querySelector(".card-inner");
+
+      // Pin EVERY card at top 12% until #problem section enters bottom of viewport
+      ScrollTrigger.create({
+        trigger: card,
+        start: "top 12%",
+        endTrigger: "#problem",
+        end: "top 90%",
+        pin: true,
+        pinSpacing: false,
+      });
+
+      // Translate cardInner upward for preceding cards to create header exposure
+      if (!isLastCard && cardInner) {
+        gsap.to(cardInner, {
+          y: `-${(cards.length - 1 - index) * 2.0}vh`,
+          ease: "none",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 12%",
+            endTrigger: "#problem",
+            end: "top 90%",
+            scrub: true,
+          },
+        });
+      }
+    });
+  };
+
+  initStickyCardsAnimation();
 });
 

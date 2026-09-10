@@ -9,12 +9,11 @@
   <meta name="description"
     content="The server sees the shape of your screen, never its secrets. A hybrid browser agent with on-device vision, zero-leak privacy, and open-weights reasoning for Smart India Hackathon 2026.">
 
-  <!-- Fonts: Bebas Neue, Anton, DM Serif Display, DM Sans, JetBrains Mono -->
+  <!-- Google Fonts: Lora (Editorial Serif) & Montserrat (Geometric Modern Sans) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,500&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
 
@@ -176,111 +175,307 @@
         <div class="metric-card">
           <div class="metric-val">82 %</div>
           <div class="metric-label">Task Success Rate</div>
-          <div class="metric-sub">Full parity with zero privacy loss</div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <!-- Interactive Hero Showcase Card -->
-      <div class="hero-device-wrapper">
-        <div class="hero-device-card">
-          <div class="hero-halftone-banner">
-            <div>
-              <div class="tag-sulfur" style="margin-bottom: 6px;">Caldera Perceptual Isolation Engine</div>
-              <div class="halftone-title"
-                style="font-family: var(--font-display); font-size: 28px; letter-spacing: 0.02em;">DUAL-REALITY
-                REDACTION RUNTIME</div>
-            </div>
-            <span class="tag-ember" style="background-color: var(--color-obsidian); color: var(--color-chalk);">WEBGPU /
-              WASM LOCAL PIPELINE</span>
-          </div>
-          <div class="device-header">
-            <div class="device-traffic-lights">
-              <span class="dot dot-red"></span>
-              <span class="dot dot-yellow"></span>
-              <span class="dot dot-green"></span>
-            </div>
-            <div class="device-address-bar">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
-              <span>https://pmkisan.gov.in/portal/scheme/apply</span>
-            </div>
-            <div class="device-status-badge">
-              <span class="pulse-indicator"></span>
-              <span>KAVACH Shield Active · MV3</span>
-            </div>
-          </div>
-
-          <div class="device-body">
-            <div class="device-split-preview">
-              <div class="preview-panel client-preview">
-                <div class="panel-header-mini">
-                  <span class="tag tag-client">YOUR LAPTOP (FULLY TRUSTED)</span>
-                  <span class="text-muted text-xs">Asha Sharma · 34 y/o</span>
+  <!-- ==================== THE SIX PILLARS OF PRAHARI (STICKY STACKING CARDS) ==================== -->
+  <section class="pillars-sticky-section" id="pillars">
+    <div class="container pillars-container">
+      <!-- Sticky Stacking Cards Section -->
+      <div class="cards" id="pillars-cards">
+        <!-- Card 1: NETRA -->
+        <div class="card" id="card-1">
+          <div class="card-inner">
+            <div class="card-content">
+              <div class="card-badge-row">
+                <div class="pillar-icon bg-blue">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
+                  </svg>
                 </div>
-                <div class="preview-form-stub">
-                  <div class="stub-row">
-                    <span class="stub-label">Beneficiary Aadhaar:</span>
-                    <span class="stub-val-raw">2345 6789 0123</span>
-                    <span class="badge-verhoeff">✓ Verhoeff Valid</span>
-                  </div>
-                  <div class="stub-row">
-                    <span class="stub-label">PAN Number:</span>
-                    <span class="stub-val-raw">ABCDE1234F</span>
-                  </div>
-                  <div class="stub-row">
-                    <span class="stub-label">Resident Photo:</span>
-                    <span class="stub-val-photo">[Biometric Portrait Loaded]</span>
-                  </div>
+                <div class="pillar-identity">
+                  <span class="pillar-seq">PILLAR 01 / 06</span>
+                  <h3 class="pillar-title">NETRA</h3>
+                  <span class="pillar-root">Sanskrit: <em>Eye</em> · Client Perception</span>
                 </div>
               </div>
+              <p class="pillar-desc">
+                Perceives live web pages on-device via WebGPU & WASM. Extracts clean DOM semantics, builds accessibility
+                trees, tracks visual mutations via tile diffing, and runs fine-tuned YOLOv8n on 105k WebUI+Rico UI elements.
+              </p>
+              <div class="pillar-specs">
+                <span class="spec-pill">BlazeFace (230 KB)</span>
+                <span class="spec-pill">YOLOv8n UI Widgets</span>
+                <span class="spec-pill">PP-OCRv5 (Canvas)</span>
+              </div>
+            </div>
+            <div class="card-img">
+              <div class="visual-panel">
+                <div class="visual-header">
+                  <span class="visual-status-dot"></span>
+                  <span class="visual-tag">ON-DEVICE PIPELINE</span>
+                </div>
+                <div class="visual-metric">
+                  <span class="metric-big">&lt; 120 ms</span>
+                  <span class="metric-caption">Tile Diff & Perception Budget</span>
+                </div>
+                <div class="visual-meta-list">
+                  <div class="meta-row"><span>Trust Boundary:</span><strong>Client Local Sandbox</strong></div>
+                  <div class="meta-row"><span>Execution:</span><strong>WebGPU / WASM Stack</strong></div>
+                  <div class="meta-row"><span>Privacy Invariant:</span><strong>Zero Raw Pixels Egress</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-              <div class="wire-channel-indicator">
-                <div class="wire-arrow-line"></div>
-                <div class="wire-pill">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <!-- Card 2: KAVACH -->
+        <div class="card" id="card-2">
+          <div class="card-inner">
+            <div class="card-content">
+              <div class="card-badge-row">
+                <div class="pillar-icon bg-green">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                   </svg>
-                  <span>SETU SSG Wire (6.1 KB)</span>
                 </div>
-                <div class="wire-arrow-line"></div>
+                <div class="pillar-identity">
+                  <span class="pillar-seq">PILLAR 02 / 06</span>
+                  <h3 class="pillar-title">KAVACH</h3>
+                  <span class="pillar-root">Sanskrit: <em>Armour</em> · Privacy Shield</span>
+                </div>
               </div>
-
-              <div class="preview-panel server-preview">
-                <div class="panel-header-mini">
-                  <span class="tag tag-server">WHAT THE SERVER SEES</span>
-                  <span class="text-muted text-xs">MANTRI / Qwen3-VL</span>
+              <p class="pillar-desc">
+                The heart of PRAHARI. Combines L0 DOM rules, L1 Indian mathematical checksum regex, and L2 GLiNER zero-shot
+                NER. Tokenizes identifiers, executes Gaussian blurs, manages the in-memory Vault with Sink Binding, and
+                enforces the 8-check Egress Guard.
+              </p>
+              <div class="pillar-specs">
+                <span class="spec-pill">Verhoeff / Luhn</span>
+                <span class="spec-pill">Sink Binding (EIA)</span>
+                <span class="spec-pill">8-Check Egress Guard</span>
+              </div>
+            </div>
+            <div class="card-img">
+              <div class="visual-panel">
+                <div class="visual-header">
+                  <span class="visual-status-dot"></span>
+                  <span class="visual-tag">MATHEMATICAL PRIVACY SHIELD</span>
                 </div>
-                <div class="preview-form-stub">
-                  <div class="stub-row">
-                    <span class="stub-label">Field e17:</span>
-                    <span class="token-chip token-aadhaar">⟦AADHAAR_1⟧</span>
-                    <span class="text-xs text-muted">Sink: #e17 only</span>
-                  </div>
-                  <div class="stub-row">
-                    <span class="stub-label">Field e18:</span>
-                    <span class="token-chip token-pan">⟦PAN_1⟧</span>
-                  </div>
-                  <div class="stub-row">
-                    <span class="stub-label">Visual Box:</span>
-                    <span class="token-chip token-face">Masked: Gaussian Blur σ=0.12</span>
-                  </div>
+                <div class="visual-metric">
+                  <span class="metric-big">0 / 60</span>
+                  <span class="metric-caption">Canary Secrets Leaked</span>
+                </div>
+                <div class="visual-meta-list">
+                  <div class="meta-row"><span>L1 Checksum:</span><strong>Verhoeff Dihedral D5</strong></div>
+                  <div class="meta-row"><span>Key Vault:</span><strong>Sink-Bound Ephemeral</strong></div>
+                  <div class="meta-row"><span>Egress Guard:</span><strong>8 Mandatory Pre-Flight Gates</strong></div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="device-footer">
-            <span class="footer-hint">
-              <strong>Core Design Insight:</strong> Redaction is an encoding with a client-held decoder. The server
-              reasons over <code>⟦AADHAAR_1⟧</code>; only your machine turns it into digits and writes it back into its
-              exact origin element.
-            </span>
+        <!-- Card 3: SETU -->
+        <div class="card" id="card-3">
+          <div class="card-inner">
+            <div class="card-content">
+              <div class="card-badge-row">
+                <div class="pillar-icon bg-purple">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 11a9 9 0 0 1 9 9" />
+                    <path d="M4 4a16 16 0 0 1 16 16" />
+                    <circle cx="5" cy="19" r="1.5" fill="currentColor" />
+                  </svg>
+                </div>
+                <div class="pillar-identity">
+                  <span class="pillar-seq">PILLAR 03 / 06</span>
+                  <h3 class="pillar-title">SETU</h3>
+                  <span class="pillar-root">Sanskrit: <em>Bridge</em> · Wire Contract</span>
+                </div>
+              </div>
+              <p class="pillar-desc">
+                The immutable JSON Schema contract between browser and cloud. Strictly enforces
+                <code>additionalProperties: false</code> so unredacted data can never cross the wire. Generates TypeScript
+                types and server Pydantic models automatically.
+              </p>
+              <div class="pillar-specs">
+                <span class="spec-pill">ssg-v1.json (6 KB)</span>
+                <span class="spec-pill">action-plan-v1.json</span>
+                <span class="spec-pill">Redaction Manifest</span>
+              </div>
+            </div>
+            <div class="card-img">
+              <div class="visual-panel">
+                <div class="visual-header">
+                  <span class="visual-status-dot"></span>
+                  <span class="visual-tag">IMMUTABLE WIRE CONTRACT</span>
+                </div>
+                <div class="visual-metric">
+                  <span class="metric-big">6.1 KB</span>
+                  <span class="metric-caption">Average SSG Wire Payload</span>
+                </div>
+                <div class="visual-meta-list">
+                  <div class="meta-row"><span>Efficiency:</span><strong>30× Smaller than Screenshots</strong></div>
+                  <div class="meta-row"><span>Schema Guard:</span><strong>additionalProperties: false</strong></div>
+                  <div class="meta-row"><span>Wire Contract:</span><strong>Strict JSON Schema 2020</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: MANTRI -->
+        <div class="card" id="card-4">
+          <div class="card-inner">
+            <div class="card-content">
+              <div class="card-badge-row">
+                <div class="pillar-icon bg-orange">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="16" x2="12" y2="12" />
+                    <line x1="12" y1="8" x2="12.01" y2="8" />
+                  </svg>
+                </div>
+                <div class="pillar-identity">
+                  <span class="pillar-seq">PILLAR 04 / 06</span>
+                  <h3 class="pillar-title">MANTRI</h3>
+                  <span class="pillar-root">Sanskrit: <em>Counsellor</em> · Cloud Planner</span>
+                </div>
+              </div>
+              <p class="pillar-desc">
+                The reasoning engine. Serves open-weights <strong>Qwen3-VL-8B-Instruct</strong> via vLLM with
+                <strong>XGrammar guided decoding</strong>. Plans actions over typed references with 100% schema validity,
+                isolated from user secrets.
+              </p>
+              <div class="pillar-specs">
+                <span class="spec-pill">Open-Weights Qwen3-VL</span>
+                <span class="spec-pill">XGrammar Decoding</span>
+                <span class="spec-pill">Air-Gapped Ready</span>
+              </div>
+            </div>
+            <div class="card-img">
+              <div class="visual-panel">
+                <div class="visual-header">
+                  <span class="visual-status-dot"></span>
+                  <span class="visual-tag">CLOUD REASONING ENGINE</span>
+                </div>
+                <div class="visual-metric">
+                  <span class="metric-big">100 %</span>
+                  <span class="metric-caption">Schema-Valid Actions</span>
+                </div>
+                <div class="visual-meta-list">
+                  <div class="meta-row"><span>Foundation:</span><strong>Qwen3-VL-8B-Instruct</strong></div>
+                  <div class="meta-row"><span>Constrained Gen:</span><strong>XGrammar Guided Decoding</strong></div>
+                  <div class="meta-row"><span>Isolation:</span><strong>Air-Gapped Cloud Compatible</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5: HASTA -->
+        <div class="card" id="card-5">
+          <div class="card-inner">
+            <div class="card-content">
+              <div class="card-badge-row">
+                <div class="pillar-icon bg-indigo">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0" />
+                    <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2" />
+                    <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8" />
+                    <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
+                  </svg>
+                </div>
+                <div class="pillar-identity">
+                  <span class="pillar-seq">PILLAR 05 / 06</span>
+                  <h3 class="pillar-title">HASTA</h3>
+                  <span class="pillar-root">Sanskrit: <em>Hand</em> · Local Executor</span>
+                </div>
+              </div>
+              <p class="pillar-desc">
+                Executes action plans inside the browser content script. Evaluates client-derived risk gating, detokenizes
+                references strictly into authorized origin sinks, and dispatches trusted events compatible with React/Vue
+                frameworks.
+              </p>
+              <div class="pillar-specs">
+                <span class="spec-pill">Sink Verification</span>
+                <span class="spec-pill">Client-Side Risk Gate</span>
+                <span class="spec-pill">React Native Setter</span>
+              </div>
+            </div>
+            <div class="card-img">
+              <div class="visual-panel">
+                <div class="visual-header">
+                  <span class="visual-status-dot"></span>
+                  <span class="visual-tag">LOCAL ACTION EXECUTOR</span>
+                </div>
+                <div class="visual-metric">
+                  <span class="metric-big">1.0 s</span>
+                  <span class="metric-caption">p50 Step Latency Budget</span>
+                </div>
+                <div class="visual-meta-list">
+                  <div class="meta-row"><span>Event Dispatch:</span><strong>Synthetic React/Vue Events</strong></div>
+                  <div class="meta-row"><span>Detokenization:</span><strong>Origin Sink Bound Only</strong></div>
+                  <div class="meta-row"><span>Risk Gating:</span><strong>High-Risk Action Block</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6: LEKHA -->
+        <div class="card" id="card-6">
+          <div class="card-inner">
+            <div class="card-content">
+              <div class="card-badge-row">
+                <div class="pillar-icon bg-teal">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                  </svg>
+                </div>
+                <div class="pillar-identity">
+                  <span class="pillar-seq">PILLAR 06 / 06</span>
+                  <h3 class="pillar-title">LEKHA</h3>
+                  <span class="pillar-root">Sanskrit: <em>Record</em> · Privacy Ledger</span>
+                </div>
+              </div>
+              <p class="pillar-desc">
+                The cryptographic audit trail. Records the SHA-256 hash, byte length, timestamp, and redaction manifest of
+                every egress payload. Enables one-click export for compliance verification and incident investigation.
+              </p>
+              <div class="pillar-specs">
+                <span class="spec-pill">SHA-256 Hash Chaining</span>
+                <span class="spec-pill">Zero Payload Storage</span>
+                <span class="spec-pill">DPDP §12 Audit Export</span>
+              </div>
+            </div>
+            <div class="card-img">
+              <div class="visual-panel">
+                <div class="visual-header">
+                  <span class="visual-status-dot"></span>
+                  <span class="visual-tag">CRYPTOGRAPHIC PRIVACY LEDGER</span>
+                </div>
+                <div class="visual-metric">
+                  <span class="metric-big">SHA-256</span>
+                  <span class="metric-caption">Tamper-Evident Hash Chaining</span>
+                </div>
+                <div class="visual-meta-list">
+                  <div class="meta-row"><span>Compliance:</span><strong>DPDP Act 2023 §12 Verified</strong></div>
+                  <div class="meta-row"><span>Retention:</span><strong>Zero Raw Secret Retention</strong></div>
+                  <div class="meta-row"><span>Audit Export:</span><strong>1-Click Manifest Export</strong></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
     </div>
   </section>
 
@@ -830,181 +1025,121 @@
     </div>
   </section>
 
-  <!-- ==================== THE 6 PILLARS ARCHITECTURE ==================== -->
+  <!-- ==================== DUAL-REALITY REDACTION RUNTIME ==================== -->
   <section class="section" id="architecture">
     <div class="container">
       <div class="section-heading text-center">
-        <div class="pill-tag">System Architecture · C4 Level 2</div>
-        <h2 class="section-title">The Six Pillars of PRAHARI</h2>
+        <div class="pill-tag">Dual-Reality Architecture · Core Engine</div>
+        <h2 class="section-title">Dual-Reality Redaction Runtime</h2>
         <p class="section-subtitle">
-          Engineered as a strict defense-in-depth pipeline. Every subsystem has an uncompromising mandate, isolated
-          trust boundaries, and measurable latency budgets.
+          Redaction is an encoding with a client-held decoder. The server reasons over typed surrogate tokens; only your machine turns them into digits and writes them back into its exact origin element.
         </p>
       </div>
 
-      <div class="bento-grid">
-        <!-- Pillar 1: NETRA -->
-        <div class="card bento-card">
-          <div class="pillar-header">
-            <div class="pillar-icon bg-blue">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="3" />
-                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
-              </svg>
-            </div>
+      <!-- Interactive Showcase Card -->
+      <div class="hero-device-wrapper" style="margin: 0 auto;">
+        <div class="hero-device-card">
+          <div class="hero-halftone-banner">
             <div>
-              <h3 class="pillar-title">NETRA</h3>
-              <span class="pillar-root">Sanskrit: <em>Eye</em> · Client Perception</span>
+              <div class="tag-sulfur" style="margin-bottom: 6px;">Caldera Perceptual Isolation Engine</div>
+              <div class="halftone-title"
+                style="font-family: var(--font-display); font-size: 28px; letter-spacing: 0.02em;">DUAL-REALITY
+                REDACTION RUNTIME</div>
+            </div>
+            <span class="tag-ember" style="background-color: var(--color-obsidian); color: var(--color-chalk);">WEBGPU /
+              WASM LOCAL PIPELINE</span>
+          </div>
+          <div class="device-header">
+            <div class="device-traffic-lights">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="device-address-bar">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              <span>https://pmkisan.gov.in/portal/scheme/apply</span>
+            </div>
+            <div class="device-status-badge">
+              <span class="pulse-indicator"></span>
+              <span>KAVACH Shield Active · MV3</span>
             </div>
           </div>
-          <p class="pillar-desc">
-            Perceives live web pages on-device via WebGPU & WASM. Extracts clean DOM semantics, builds accessibility
-            trees, tracks visual mutations via tile diffing, and runs fine-tuned YOLOv8n on 105k WebUI+Rico UI elements.
-          </p>
-          <div class="pillar-specs">
-            <span class="spec-pill">BlazeFace (230 KB)</span>
-            <span class="spec-pill">YOLOv8n UI Widgets</span>
-            <span class="spec-pill">PP-OCRv5 (Canvas)</span>
-          </div>
-        </div>
 
-        <!-- Pillar 2: KAVACH -->
-        <div class="card bento-card highlight-card">
-          <div class="pillar-header">
-            <div class="pillar-icon bg-green">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-            </div>
-            <div>
-              <h3 class="pillar-title">KAVACH</h3>
-              <span class="pillar-root">Sanskrit: <em>Armour</em> · Privacy Shield</span>
-            </div>
-          </div>
-          <p class="pillar-desc">
-            The heart of PRAHARI. Combines L0 DOM rules, L1 Indian mathematical checksum regex, and L2 GLiNER zero-shot
-            NER. Tokenizes identifiers, executes Gaussian blurs, manages the in-memory Vault with Sink Binding, and
-            enforces the 8-check Egress Guard.
-          </p>
-          <div class="pillar-specs">
-            <span class="spec-pill">Verhoeff / Luhn</span>
-            <span class="spec-pill">Sink Binding (EIA)</span>
-            <span class="spec-pill">8-Check Egress Guard</span>
-          </div>
-        </div>
+          <div class="device-body">
+            <div class="device-split-preview">
+              <div class="preview-panel client-preview">
+                <div class="panel-header-mini">
+                  <span class="tag tag-client">YOUR LAPTOP (FULLY TRUSTED)</span>
+                  <span class="text-muted text-xs">Asha Sharma · 34 y/o</span>
+                </div>
+                <div class="preview-form-stub">
+                  <div class="stub-row">
+                    <span class="stub-label">Beneficiary Aadhaar:</span>
+                    <span class="stub-val-raw">2345 6789 0123</span>
+                    <span class="badge-verhoeff">✓ Verhoeff Valid</span>
+                  </div>
+                  <div class="stub-row">
+                    <span class="stub-label">PAN Number:</span>
+                    <span class="stub-val-raw">ABCDE1234F</span>
+                  </div>
+                  <div class="stub-row">
+                    <span class="stub-label">Resident Photo:</span>
+                    <span class="stub-val-photo">[Biometric Portrait Loaded]</span>
+                  </div>
+                </div>
+              </div>
 
-        <!-- Pillar 3: SETU (Caldera Signature Standout Plasma Surface) -->
-        <div class="card bento-card standout-plasma">
-          <div class="pillar-header">
-            <div class="pillar-icon bg-purple">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 11a9 9 0 0 1 9 9" />
-                <path d="M4 4a16 16 0 0 1 16 16" />
-                <circle cx="5" cy="19" r="1" />
-              </svg>
-            </div>
-            <div>
-              <h3 class="pillar-title">SETU</h3>
-              <span class="pillar-root">Sanskrit: <em>Bridge</em> · Wire Contract</span>
-            </div>
-          </div>
-          <p class="pillar-desc">
-            The immutable JSON Schema contract between browser and cloud. Strictly enforces
-            <code>additionalProperties: false</code> so unredacted data can never cross the wire. Generates TypeScript
-            types and server Pydantic models automatically.
-          </p>
-          <div class="pillar-specs">
-            <span class="spec-pill">ssg-v1.json (6 KB)</span>
-            <span class="spec-pill">action-plan-v1.json</span>
-            <span class="spec-pill">Redaction Manifest</span>
-          </div>
-        </div>
+              <div class="wire-channel-indicator">
+                <div class="wire-arrow-line"></div>
+                <div class="wire-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                  <span>SETU SSG Wire (6.1 KB)</span>
+                </div>
+                <div class="wire-arrow-line"></div>
+              </div>
 
-        <!-- Pillar 4: MANTRI -->
-        <div class="card bento-card">
-          <div class="pillar-header">
-            <div class="pillar-icon bg-orange">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="16" x2="12" y2="12" />
-                <line x1="12" y1="8" x2="12.01" y2="8" />
-              </svg>
-            </div>
-            <div>
-              <h3 class="pillar-title">MANTRI</h3>
-              <span class="pillar-root">Sanskrit: <em>Counsellor</em> · Cloud Planner</span>
+              <div class="preview-panel server-preview">
+                <div class="panel-header-mini">
+                  <span class="tag tag-server">WHAT THE SERVER SEES</span>
+                  <span class="text-muted text-xs">MANTRI / Qwen3-VL</span>
+                </div>
+                <div class="preview-form-stub">
+                  <div class="stub-row">
+                    <span class="stub-label">Field e17:</span>
+                    <span class="token-chip token-aadhaar">⟦AADHAAR_1⟧</span>
+                    <span class="text-xs text-muted">Sink: #e17 only</span>
+                  </div>
+                  <div class="stub-row">
+                    <span class="stub-label">Field e18:</span>
+                    <span class="token-chip token-pan">⟦PAN_1⟧</span>
+                  </div>
+                  <div class="stub-row">
+                    <span class="stub-label">Visual Box:</span>
+                    <span class="token-chip token-face">Masked: Gaussian Blur σ=0.12</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <p class="pillar-desc">
-            The reasoning engine. Serves open-weights <strong>Qwen3-VL-8B-Instruct</strong> via vLLM with
-            <strong>XGrammar guided decoding</strong>. Plans actions over typed references with 100% schema validity,
-            isolated from user secrets.
-          </p>
-          <div class="pillar-specs">
-            <span class="spec-pill">Open-Weights Qwen3-VL</span>
-            <span class="spec-pill">XGrammar Decoding</span>
-            <span class="spec-pill">Air-Gapped Ready</span>
-          </div>
-        </div>
 
-        <!-- Pillar 5: HASTA -->
-        <div class="card bento-card">
-          <div class="pillar-header">
-            <div class="pillar-icon bg-indigo">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0" />
-                <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2" />
-                <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8" />
-                <path
-                  d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
-              </svg>
-            </div>
-            <div>
-              <h3 class="pillar-title">HASTA</h3>
-              <span class="pillar-root">Sanskrit: <em>Hand</em> · Local Executor</span>
-            </div>
-          </div>
-          <p class="pillar-desc">
-            Executes action plans inside the browser content script. Evaluates client-derived risk gating, detokenizes
-            references strictly into authorized origin sinks, and dispatches trusted events compatible with React/Vue
-            frameworks.
-          </p>
-          <div class="pillar-specs">
-            <span class="spec-pill">Sink Verification</span>
-            <span class="spec-pill">Client-Side Risk Gate</span>
-            <span class="spec-pill">React Native Setter</span>
-          </div>
-        </div>
-
-        <!-- Pillar 6: LEKHA -->
-        <div class="card bento-card">
-          <div class="pillar-header">
-            <div class="pillar-icon bg-teal">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-              </svg>
-            </div>
-            <div>
-              <h3 class="pillar-title">LEKHA</h3>
-              <span class="pillar-root">Sanskrit: <em>Record</em> · Privacy Ledger</span>
-            </div>
-          </div>
-          <p class="pillar-desc">
-            The cryptographic audit trail. Records the SHA-256 hash, byte length, timestamp, and redaction manifest of
-            every egress payload. Enables one-click export for compliance verification and incident investigation.
-          </p>
-          <div class="pillar-specs">
-            <span class="spec-pill">SHA-256 Hash Chaining</span>
-            <span class="spec-pill">Zero Payload Storage</span>
-            <span class="spec-pill">DPDP §12 Audit Export</span>
+          <div class="device-footer">
+            <span class="footer-hint">
+              <strong>Core Design Insight:</strong> Redaction is an encoding with a client-held decoder. The server
+              reasons over <code>⟦AADHAAR_1⟧</code>; only your machine turns it into digits and writes it back into its
+              exact origin element.
+            </span>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+
 
   <!-- ==================== ADAPTIVE PERCEPTION CONTROLLER (TIERS) ==================== -->
   <section class="section section-alt" id="tier-controller">
@@ -1686,9 +1821,11 @@
     </div>
   </footer>
 
-  <!-- Javascript Script CDN libraries (gsap + Splitting.js + Rive) -->
+  <!-- Javascript Script CDN libraries (gsap + ScrollTrigger + Lenis + Splitting.js + Rive) -->
   <script src="https://unpkg.com/@rive-app/canvas@2.9.1"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
 
   <script src="app.js"></script>

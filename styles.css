@@ -7,7 +7,7 @@
    Hero Gradient: Plasma Violet (#524AE9)
    Badges & Tags: Sulfur (#F5F28E)
    Text & Headings: Obsidian (#070607) · Chalk (#FFFFFF)
-   Typography: Bebas Neue / Anton (Display), DM Sans 500 (Body), JetBrains Mono
+   Typography: Lora (Editorial Serif), Montserrat (Geometric Sans), JetBrains Mono (Technical)
    Aesthetics: Flat, shadowless, 40px card radius, 800px pill buttons, dotted dividers
    ========================================================================== */
 
@@ -50,10 +50,13 @@
   --badge-purple: var(--color-plasma-violet);
   --divider: #070607;
 
-  /* ── Typography ── */
-  --font-display: 'Bebas Neue', 'Anton', Impact, 'Arial Narrow', sans-serif;
-  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-handwritten: 'DM Sans', sans-serif;
+  /* ── Typography: Top 1% Creative Editorial (Lora) + Geometric Tech (Montserrat) ── */
+  --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-heading: 'Lora', Georgia, serif;
+  --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-handwritten: 'Lora', Georgia, serif;
   --font-mono: 'JetBrains Mono', monospace;
 
   /* ── Triple-Radius System ── */
@@ -457,8 +460,9 @@ pre,
   right: clamp(20px, 3vw, 40px);
   z-index: 1000;
   text-transform: uppercase;
-  font-family: var(--font-mono);
-  font-size: clamp(0.86rem, 0.95vw, 0.92rem);
+  font-family: var(--font-sans);
+  letter-spacing: 0.08em;
+  font-size: clamp(0.82rem, 0.9vw, 0.88rem);
   font-weight: 700;
   padding: 0.65rem 1.65rem;
   color: #ffffff;
@@ -538,7 +542,7 @@ pre,
 
 .menu-item {
   text-decoration: none;
-  font-family: "DM Serif Display", Georgia, serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.4rem, 2.6vw, 2.75rem);
   letter-spacing: -0.01em;
   line-height: 1.15;
@@ -707,12 +711,12 @@ pre,
 }
 
 .hero_row_text h1 {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  font-family: var(--font-sans) !important;
   font-size: clamp(2.5rem, 11.2vw, 21vh);
   line-height: 1;
-  font-weight: 300 !important;
+  font-weight: 800 !important;
   text-transform: uppercase !important;
-  letter-spacing: -0.01em !important;
+  letter-spacing: -0.02em !important;
   color: #f0f2d8 !important;
   white-space: nowrap;
   margin: 0;
@@ -720,10 +724,10 @@ pre,
 }
 
 .hero_row_text h4 {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  font-family: var(--font-sans) !important;
   font-size: clamp(14px, 2.2vw, 32px);
   line-height: 1;
-  font-weight: 400 !important;
+  font-weight: 600 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.14em !important;
   color: #f0f2d8 !important;
@@ -857,14 +861,15 @@ pre,
 }
 
 .hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(36px, 5.6vw, 64px);
+  font-family: var(--font-heading);
+  font-size: clamp(34px, 5.2vw, 62px);
   font-weight: 600;
-  line-height: 1.12;
+  line-height: 1.16;
   color: var(--cocoa-ink);
-  max-width: 940px;
+  max-width: 960px;
   margin-bottom: 24px;
-  text-transform: lowercase;
+  text-transform: none;
+  letter-spacing: -0.02em;
 }
 
 .hero-title-highlight {
@@ -1237,13 +1242,14 @@ pre,
 }
 
 .section-title {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 4vw, 42px);
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 3.8vw, 44px);
   font-weight: 600;
-  line-height: 1.18;
+  line-height: 1.2;
   color: var(--cocoa-ink);
   margin-bottom: 14px;
-  text-transform: uppercase;
+  text-transform: none;
+  letter-spacing: -0.015em;
 }
 
 .section-subtitle {
@@ -2189,33 +2195,36 @@ pre,
   justify-content: space-between;
   background-color: var(--white-card);
   border: var(--border);
-  border-radius: 40px;
-  padding: 24px;
+  border-radius: 28px;
+  padding: 26px;
   box-shadow: none !important;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .bento-card:hover {
   transform: translateY(-2px);
+  border-color: var(--color-ember);
 }
 
 .pillar-header {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 14px;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .pillar-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 40px;
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
+  border-radius: 18px;
   border: var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #FFFFFF;
   box-shadow: none !important;
+  flex-shrink: 0;
 }
 
 .bg-blue {
@@ -2243,23 +2252,30 @@ pre,
 }
 
 .pillar-title {
-  font-family: var(--font-display);
-  font-size: 20px;
+  font-family: var(--font-body);
+  font-size: 22px;
   font-weight: 700;
   color: var(--cocoa-ink);
+  line-height: 1.15;
+  margin-bottom: 3px;
+  letter-spacing: 0.02em;
 }
 
 .pillar-root {
-  font-family: var(--font-handwritten);
-  font-size: 14px;
-  color: var(--marker-orange);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-ember);
+  display: block;
 }
 
 .pillar-desc {
   font-size: 14px;
   color: var(--warm-coffee);
-  line-height: 1.55;
-  margin-bottom: 18px;
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
 
 .pillar-specs {
@@ -2281,6 +2297,253 @@ pre,
 .highlight-card {
   border: 2px solid var(--cocoa-ink);
   background-color: #FFFDF8;
+}
+
+/* --------------------------------------------------------------------------
+   STICKY CARDS SCROLL ANIMATION (GSAP + LENIS)
+   -------------------------------------------------------------------------- */
+.pillars-sticky-section {
+  position: relative;
+  width: 100%;
+  padding-top: 40px;
+  padding-bottom: 20vh;
+}
+
+.pillars-container {
+  max-width: 1520px;
+  width: 95vw;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10em;
+  padding-bottom: 25vh;
+  position: relative;
+  z-index: 10;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  min-height: 480px;
+  max-height: 600px;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 2.8em 3.4em;
+  display: flex;
+  gap: 3.2em;
+  border-radius: 2em;
+  border: 2.5px solid var(--color-obsidian, #070607);
+  box-shadow: 0 16px 48px rgba(7, 6, 7, 0.1);
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-content {
+  flex: 1.45;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 8px;
+}
+
+.pillar-identity {
+  display: flex;
+  flex-direction: column;
+}
+
+.pillar-seq {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-ember, #FC5000);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.card-content .pillar-title {
+  font-family: var(--font-heading);
+  font-size: 2.85rem;
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin-bottom: 3px;
+  color: var(--color-obsidian, #070607);
+}
+
+.pillar-root {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--warm-coffee, #4a4540);
+  margin-top: 2px;
+}
+
+.card-content .pillar-desc {
+  font-size: 1.12rem;
+  line-height: 1.65;
+  color: #2b2727;
+  margin: 16px 0;
+  max-width: 760px;
+}
+
+.card-img {
+  flex: 1.15;
+  border-radius: 1.5em;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+}
+
+.visual-panel {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.88);
+  border: 2px solid rgba(7, 6, 7, 0.16);
+  border-radius: 1.5em;
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(7, 6, 7, 0.05);
+}
+
+.visual-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.live-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-ember, #FC5000);
+  box-shadow: 0 0 8px rgba(252, 80, 0, 0.6);
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+.visual-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-obsidian, #070607);
+  text-transform: uppercase;
+}
+
+.visual-body {
+  margin: 16px 0;
+}
+
+.metric-big {
+  font-size: 3.6rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--color-obsidian, #070607);
+}
+
+.metric-caption {
+  font-size: 12px;
+  color: var(--warm-coffee, #4a4540);
+  margin-top: 6px;
+  font-family: var(--font-mono);
+}
+
+.visual-meta-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(7, 6, 7, 0.18);
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.meta-row span {
+  color: var(--warm-coffee, #4a4540);
+}
+
+.meta-row strong {
+  font-family: var(--font-mono);
+  color: var(--color-obsidian, #070607);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Card Theme Background Palette (Light Pink, Yellow, Orange, Light Purple, Cream)
+   -------------------------------------------------------------------------- */
+#card-1 .card-inner {
+  background-color: #FFDDE6; /* Light Pink */
+}
+
+#card-2 .card-inner {
+  background-color: #FEF08A; /* Yellow */
+}
+
+#card-3 .card-inner {
+  background-color: #FFD0A8; /* Orange */
+}
+
+#card-4 .card-inner {
+  background-color: #E2D4FF; /* Light Purple */
+}
+
+#card-5 .card-inner {
+  background-color: #FFF8E7; /* Cream */
+}
+
+#card-6 .card-inner {
+  background-color: #FFD5CC; /* Soft Peach Coral */
+}
+
+
+/* Responsive Adaptation */
+@media (max-width: 900px) {
+  .cards {
+    gap: 4em;
+  }
+
+  .card {
+    height: auto;
+    min-height: auto;
+    max-height: none;
+  }
+
+  .card-inner {
+    flex-direction: column;
+    gap: 2em;
+    padding: 1.8em;
+  }
+
+  .card-img {
+    width: 100%;
+  }
+#problem {
+  position: relative;
+  z-index: 20;
+  background-color: var(--dew-drop, #F0EFEA);
 }
 
 /* --------------------------------------------------------------------------
@@ -2937,67 +3200,113 @@ pre,
 }
 
 
+/* ==========================================================================
+   TOP 1% CREATIVE TYPOGRAPHY SYSTEM
+   Lora (Editorial Literary Serif) + Montserrat (Geometric Modern Sans)
+   ========================================================================== */
+
+/* Editorial Headlines & Narrative Display */
 h1,
 h2,
-h3,
-h4,
 .hero-title,
 .section-title,
-.card-title,
 .pillar-title,
-.font-display {
-  font-family: var(--font-display) !important;
-  font-weight: 400;
-  text-transform: uppercase !important;
-  letter-spacing: 0.02em;
-  line-height: 0.95;
+.editorial-title {
+  font-family: var(--font-heading) !important;
+  font-weight: 600;
+  text-transform: none !important;
+  letter-spacing: -0.018em;
+  line-height: 1.18;
   color: var(--color-obsidian);
 }
 
+.hero-title {
+  font-size: clamp(34px, 5vw, 62px);
+  line-height: 1.16;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  text-transform: none !important;
+}
+
+.section-title {
+  font-size: clamp(28px, 3.6vw, 44px);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  text-transform: none !important;
+}
+
+.pillar-title {
+  font-family: var(--font-heading) !important;
+  font-size: clamp(2.2rem, 3.2vw, 2.9rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.015em;
+  line-height: 1.08;
+  text-transform: none !important;
+  color: var(--color-obsidian, #070607);
+}
+
+/* Geometric Tech UI & Component Headings */
+h3,
+h4,
+.card-title,
+.font-display {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--color-obsidian);
+}
+
+/* Refined Body & Reading Experience */
+body,
 p,
-span,
 li,
-a,
-button {
+dd,
+input,
+textarea,
+select {
   font-family: var(--font-body);
-  font-weight: 500;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: -0.01em;
 }
 
-
-/* Standout Plasma Violet Bento Card */
-.bento-card.standout-plasma,
-.bento-card.highlight-card {
-  background-color: var(--color-plasma-violet) !important;
-  color: var(--color-chalk) !important;
-  border: none !important;
-  position: relative;
-  overflow: hidden;
+strong,
+b {
+  font-weight: 700;
 }
 
-.bento-card.standout-plasma::before,
-.bento-card.highlight-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.35) 2.2px, transparent 2.4px);
-  background-size: 14px 14px;
-  pointer-events: none;
-  opacity: 0.65;
+/* Micro-copy, Eyebrows, Badges & Interactive Controls */
+.section-tag,
+.pillar-seq,
+.pill-tag,
+.tag-sulfur,
+.category-tag,
+.trilemma-badge,
+.hero-annotation,
+.brand-name,
+.btn,
+.nav-link,
+.footer-col-title {
+  font-family: var(--font-sans);
+  letter-spacing: 0.04em;
 }
 
-.bento-card.standout-plasma .pillar-title,
-.bento-card.standout-plasma .pillar-desc,
-.bento-card.standout-plasma .pillar-root,
-.bento-card.highlight-card .pillar-title,
-.bento-card.highlight-card .pillar-desc,
-.bento-card.highlight-card .pillar-root {
-  color: var(--color-chalk) !important;
-  position: relative;
-  z-index: 1;
+.pillar-seq,
+.section-tag,
+.hero-annotation {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.bento-card.highlight-card .pillar-specs .spec-pill {
-  background-color: rgba(255, 255, 255, 0.15) !important;
-  color: var(--color-chalk) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-}
+/* Quantitative Impact Numbers */
+.metric-val,
+.metric-big {
+  font-family: var(--font-sans) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  line-height: 0.95 !important;
+}
