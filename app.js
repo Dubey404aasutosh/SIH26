@@ -378,21 +378,20 @@ document.addEventListener('DOMContentLoaded', () => {
   updateTierDisplay(0);
 
   /* ==========================================================================
-     7. 8-CHECK EGRESS GUARD SIMULATOR (FAIL-CLOSED TEST)
+     7. EGRESS GUARD SIMULATOR (CHECK #2 FAIL-CLOSED INJECTION)
      ========================================================================== */
   const btnInjectLeak = document.getElementById('btn-inject-leak');
   const guardBanner = document.getElementById('guard-banner');
   const checkItems = document.querySelectorAll('.check-item');
-  let isLeakingState = false;
+  let isLeakInjected = false;
 
   btnInjectLeak.addEventListener('click', () => {
-    isLeakingState = !isLeakingState;
+    isLeakInjected = !isLeakInjected;
 
-    if (isLeakingState) {
-      btnInjectLeak.textContent = 'Reset to Clean State';
+    if (isLeakInjected) {
+      btnInjectLeak.innerHTML = '<span class="btn-icon">↺</span><span class="btn-label">Reset to Clean State</span>';
       btnInjectLeak.className = 'btn btn-secondary btn-sm';
 
-      // Check #2 Fails
       checkItems.forEach(item => {
         if (item.getAttribute('data-check') === '2') {
           item.className = 'check-item check-failed';
@@ -409,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
     } else {
-      btnInjectLeak.textContent = 'Simulate PII Leak Attack';
+      btnInjectLeak.innerHTML = '<span class="btn-icon">⚡</span><span class="btn-label">Simulate PII Leak Attack</span>';
       btnInjectLeak.className = 'btn btn-danger btn-sm';
 
       checkItems.forEach(item => {
@@ -831,12 +830,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isMenuOpen) {
           menu.classList.add("is-menu-open");
           menu.setAttribute("aria-hidden", "false");
+          if (window.lenis) window.lenis.stop();
           if (tl) {
             tl.timeScale(1);
             tl.play();
           }
         } else {
           menu.setAttribute("aria-hidden", "true");
+          if (window.lenis) window.lenis.start();
           if (tl) {
             tl.timeScale(1.65);
             tl.reverse();
@@ -874,23 +875,22 @@ document.addEventListener('DOMContentLoaded', () => {
   initObscuraMenu();
 
   /* ==========================================================================
-     17. STICKY CARDS SCROLL ANIMATION (GSAP + SCROLLTRIGGER + LENIS)
+     17. GLOBAL SMOOTH SCROLL ENGINE (LENIS + GSAP SCROLLTRIGGER SYNC)
      ========================================================================== */
-  const initStickyCardsAnimation = () => {
-    const cardsContainer = document.querySelector("#pillars-cards");
-    const cards = gsap.utils.toArray("#pillars-cards .card");
+  const initGlobalSmoothScroll = () => {
+    if (typeof Lenis === "undefined") return;
 
-    if (!cardsContainer || !cards.length) return;
-    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.5,
+    });
+    window.lenis = lenis;
 
-    // 1. Initialize Lenis Smooth Scroll Engine (if Lenis is loaded)
-    if (typeof Lenis !== "undefined") {
-      const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
-      });
-
+    if (typeof ScrollTrigger !== "undefined") {
+      gsap.registerPlugin(ScrollTrigger);
       lenis.on("scroll", ScrollTrigger.update);
 
       gsap.ticker.add((time) => {
@@ -900,10 +900,33 @@ document.addEventListener('DOMContentLoaded', () => {
       gsap.ticker.lagSmoothing(0);
     }
 
-    // 2. Register GSAP ScrollTrigger Plugin
-    gsap.registerPlugin(ScrollTrigger);
+    // Smooth anchor navigation for all in-page links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", (e) => {
+        const href = anchor.getAttribute("href");
+        if (!href || href === "#") return;
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          lenis.scrollTo(target, { offset: -30, duration: 1.35 });
+        }
+      });
+    });
+  };
 
-    // 3. Pin ALL Cards & Animate Card Stack Upward Shift
+  initGlobalSmoothScroll();
+
+  /* ==========================================================================
+     18. STICKY CARDS SCROLL ANIMATION (GSAP + SCROLLTRIGGER)
+     ========================================================================== */
+  const initStickyCardsAnimation = () => {
+    const cardsContainer = document.querySelector("#pillars-cards");
+    const cards = gsap.utils.toArray("#pillars-cards .card");
+
+    if (!cardsContainer || !cards.length) return;
+    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
+
+    // Pin ALL Cards & Animate Card Stack Upward Shift
     cards.forEach((card, index) => {
       const isLastCard = index === cards.length - 1;
       const cardInner = card.querySelector(".card-inner");
@@ -936,5 +959,376 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   initStickyCardsAnimation();
+
+  /* ==========================================================================
+     19. TOP 1% PARALLAX & 3D SPATIAL DEPTH ENGINE
+     ========================================================================== */
+  const initTopParallaxEngine = () => {
+    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    // ── A. HERO REVEAL MULTI-PLANE KINETIC PARALLAX ──
+    const hero = document.querySelector(".hero");
+    if (hero) {
+      const heroMedia = hero.querySelector("#hero-media");
+      if (heroMedia) {
+        gsap.to(heroMedia, {
+          yPercent: 32,
+          scale: 1.08,
+          ease: "none",
+          scrollTrigger: {
+            trigger: hero,
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.5,
+          },
+        });
+      }
+
+      // Dynamic alternating row drift
+      const rows = hero.querySelectorAll(".hero_row");
+      rows.forEach((row, i) => {
+        const text = row.querySelector(".hero_row_text");
+        if (!text) return;
+        const xOffset = (i % 2 === 0 ? -42 : 42) * (1 + i * 0.12);
+        const yOffset = -20 - i * 7;
+
+        gsap.to(text, {
+          x: xOffset,
+          y: yOffset,
+          opacity: 0.9,
+          ease: "none",
+          scrollTrigger: {
+            trigger: hero,
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.5,
+          },
+        });
+      });
+
+      // Lift & fade hero scroll prompt
+      const scrollPrompt = hero.querySelector(".hero_scroll_prompt");
+      if (scrollPrompt) {
+        gsap.to(scrollPrompt, {
+          y: -35,
+          opacity: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: hero,
+            start: "top top",
+            end: "40% top",
+            scrub: true,
+          },
+        });
+      }
+    }
+
+    // ── B. HERO OVERVIEW & METRICS FLOATING PARALLAX ──
+    const showcase = document.querySelector("#hero-showcase");
+    if (showcase) {
+      const badge = showcase.querySelector(".hero-badge");
+      const title = showcase.querySelector(".hero-title");
+      const subtitle = showcase.querySelector(".hero-subtitle");
+      const cards = showcase.querySelectorAll(".metric-card");
+
+      if (badge) {
+        gsap.to(badge, {
+          y: -26,
+          ease: "none",
+          scrollTrigger: {
+            trigger: showcase,
+            start: "top 85%",
+            end: "bottom top",
+            scrub: 0.6,
+          },
+        });
+      }
+
+      if (title) {
+        gsap.to(title, {
+          y: -18,
+          ease: "none",
+          scrollTrigger: {
+            trigger: showcase,
+            start: "top 80%",
+            end: "bottom top",
+            scrub: 0.6,
+          },
+        });
+      }
+
+      if (subtitle) {
+        gsap.to(subtitle, {
+          y: -10,
+          ease: "none",
+          scrollTrigger: {
+            trigger: showcase,
+            start: "top 75%",
+            end: "bottom top",
+            scrub: 0.6,
+          },
+        });
+      }
+
+      // Organic wavy staggered floating metric cards
+      const cardSpeeds = [-14, -34, -18, -42];
+      cards.forEach((card, idx) => {
+        card.classList.add("parallax-gpu");
+        const speed = cardSpeeds[idx % cardSpeeds.length];
+        gsap.to(card, {
+          y: speed,
+          ease: "none",
+          scrollTrigger: {
+            trigger: showcase,
+            start: "top 70%",
+            end: "bottom 15%",
+            scrub: 0.7,
+          },
+        });
+      });
+    }
+
+    // ── C. UNIVERSAL SECTION HEADINGS MICRO-PARALLAX ──
+    document.querySelectorAll(".section-heading").forEach((heading) => {
+      const tag = heading.querySelector(".section-tag, .tag-sulfur, .pill-tag");
+      const title = heading.querySelector(".section-title");
+      const subtitle = heading.querySelector(".section-subtitle");
+
+      if (tag) {
+        tag.classList.add("parallax-gpu");
+        gsap.to(tag, {
+          y: -22,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heading,
+            start: "top 92%",
+            end: "bottom 15%",
+            scrub: 0.8,
+          },
+        });
+      }
+
+      if (title) {
+        title.classList.add("parallax-gpu");
+        gsap.to(title, {
+          y: -14,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heading,
+            start: "top 88%",
+            end: "bottom 15%",
+            scrub: 0.8,
+          },
+        });
+      }
+
+      if (subtitle) {
+        subtitle.classList.add("parallax-gpu");
+        gsap.to(subtitle, {
+          y: -7,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heading,
+            start: "top 84%",
+            end: "bottom 10%",
+            scrub: 0.8,
+          },
+        });
+      }
+    });
+
+    // ── D. FEATURE SECTIONS MULTI-LAYER PARALLAX ──
+
+    // 1. #problem (Trilemma Cards Parallax Elevation)
+    const trilemmaCards = document.querySelectorAll(".trilemma-card");
+    if (trilemmaCards.length >= 3) {
+      const offsets = [16, -8, -32]; // PRAHARI physically ascends above legacy options
+      trilemmaCards.forEach((card, idx) => {
+        card.classList.add("parallax-gpu");
+        gsap.to(card, {
+          y: offsets[idx] || -15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "#problem",
+            start: "top 75%",
+            end: "bottom 20%",
+            scrub: 0.8,
+          },
+        });
+      });
+    }
+
+    // 2. #diff-section (Asymmetrical Dual-Reality Split Drift)
+    const diffPanes = document.querySelectorAll("#diff-section .diff-pane");
+    if (diffPanes.length >= 2) {
+      diffPanes[0].classList.add("parallax-gpu");
+      diffPanes[1].classList.add("parallax-gpu");
+
+      gsap.to(diffPanes[0], {
+        y: -16,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#diff-section",
+          start: "top 70%",
+          end: "bottom 20%",
+          scrub: 0.8,
+        },
+      });
+
+      gsap.to(diffPanes[1], {
+        y: 16,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#diff-section",
+          start: "top 70%",
+          end: "bottom 20%",
+          scrub: 0.8,
+        },
+      });
+    }
+
+    // 3. #architecture (Device Card Elevation Parallax)
+    const heroDevice = document.querySelector(".hero-device-wrapper");
+    if (heroDevice) {
+      heroDevice.classList.add("parallax-gpu");
+      gsap.to(heroDevice, {
+        y: -24,
+        scale: 1.01,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#architecture",
+          start: "top 75%",
+          end: "bottom 25%",
+          scrub: 0.8,
+        },
+      });
+    }
+
+    // 4. #egress-guard (Checklist Stagger Parallax)
+    const egressItems = document.querySelectorAll(".check-item");
+    if (egressItems.length) {
+      egressItems.forEach((item, idx) => {
+        item.classList.add("parallax-gpu");
+        const dir = idx % 2 === 0 ? -1 : 1;
+        gsap.to(item, {
+          y: dir * (8 + (idx % 3) * 4),
+          ease: "none",
+          scrollTrigger: {
+            trigger: "#egress-guard",
+            start: "top 70%",
+            end: "bottom 20%",
+            scrub: 0.8,
+          },
+        });
+      });
+    }
+
+    // 5. #benchmarks (Canary Stat Cards Stagger)
+    const benchmarkCards = document.querySelectorAll(".canary-stat-card");
+    benchmarkCards.forEach((card, idx) => {
+      card.classList.add("parallax-gpu");
+      gsap.to(card, {
+        y: -12 - (idx * 10),
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#benchmarks",
+          start: "top 70%",
+          end: "bottom 20%",
+          scrub: 0.8,
+        },
+      });
+    });
+
+    // ── E. INTERACTIVE 3D MOUSE PARALLAX & RAY-TRACED SHEEN ──
+    const initMouseTilt = () => {
+      if (window.matchMedia("(pointer: coarse)").matches) return; // Skip touch screens
+
+      const tiltCards = document.querySelectorAll(
+        ".metric-card, .trilemma-card, .hero-device-card, .tier-interactive-card, .canary-stat-card, .qa-card"
+      );
+
+      tiltCards.forEach((card) => {
+        card.classList.add("tilt-parallax-target");
+        const parent = card.parentElement;
+        if (parent && !parent.classList.contains("has-parallax-tilt")) {
+          parent.classList.add("has-parallax-tilt");
+        }
+
+        // Add specular glare layer
+        let glare = card.querySelector(".card-parallax-glare");
+        if (!glare) {
+          glare = document.createElement("div");
+          glare.className = "card-parallax-glare";
+          card.appendChild(glare);
+        }
+
+        let bounds = null;
+        let isHovered = false;
+        let targetRotX = 0;
+        let targetRotY = 0;
+        let currRotX = 0;
+        let currRotY = 0;
+        let animFrame = null;
+
+        const updateTilt = () => {
+          if (!isHovered) {
+            currRotX += (0 - currRotX) * 0.12;
+            currRotY += (0 - currRotY) * 0.12;
+            glare.style.opacity = "0";
+
+            if (Math.abs(currRotX) < 0.05 && Math.abs(currRotY) < 0.05) {
+              card.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg) translateY(0)";
+              cancelAnimationFrame(animFrame);
+              animFrame = null;
+              return;
+            }
+          } else {
+            currRotX += (targetRotX - currRotX) * 0.14;
+            currRotY += (targetRotY - currRotY) * 0.14;
+          }
+
+          card.style.transform = `perspective(1200px) rotateX(${currRotX.toFixed(2)}deg) rotateY(${currRotY.toFixed(2)}deg) translateY(-3px)`;
+          animFrame = requestAnimationFrame(updateTilt);
+        };
+
+        card.addEventListener("mouseenter", () => {
+          bounds = card.getBoundingClientRect();
+          isHovered = true;
+          if (!animFrame) {
+            animFrame = requestAnimationFrame(updateTilt);
+          }
+        });
+
+        card.addEventListener("mousemove", (e) => {
+          if (!bounds) bounds = card.getBoundingClientRect();
+          const mouseX = e.clientX - bounds.left;
+          const mouseY = e.clientY - bounds.top;
+
+          const normX = mouseX / bounds.width - 0.5;
+          const normY = mouseY / bounds.height - 0.5;
+
+          // Subtle elegant tilt angle (+/- 7.5 deg)
+          targetRotX = -normY * 11;
+          targetRotY = normX * 11;
+
+          // Dynamic light specular reflection
+          glare.style.opacity = "1";
+          glare.style.background = `radial-gradient(circle at ${mouseX}px ${mouseY}px, rgba(255, 255, 255, 0.22) 0%, transparent 65%)`;
+        });
+
+        card.addEventListener("mouseleave", () => {
+          isHovered = false;
+          targetRotX = 0;
+          targetRotY = 0;
+          bounds = null;
+        });
+      });
+    };
+
+    initMouseTilt();
+  };
+
+  initTopParallaxEngine();
 });
 

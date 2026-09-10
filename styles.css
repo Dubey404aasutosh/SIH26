@@ -705,35 +705,50 @@ pre,
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 0 clamp(24px, 4vw, 64px);
+  padding: 0 clamp(20px, 3.2vw, 48px);
+  gap: clamp(16px, 2vw, 32px);
   overflow: hidden;
   box-sizing: border-box;
 }
 
 .hero_row_text h1 {
   font-family: var(--font-sans) !important;
-  font-size: clamp(2.5rem, 11.2vw, 21vh);
+  font-size: clamp(2.4rem, 8.5vw, 16.5vh);
   line-height: 1;
   font-weight: 800 !important;
   text-transform: uppercase !important;
-  letter-spacing: -0.02em !important;
+  letter-spacing: -0.03em !important;
   color: #f0f2d8 !important;
   white-space: nowrap;
   margin: 0;
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.8), 0 0 4px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
 }
 
 .hero_row_text h4 {
   font-family: var(--font-sans) !important;
-  font-size: clamp(14px, 2.2vw, 32px);
+  font-size: clamp(12px, 1.2vw, 18px);
   line-height: 1;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.14em !important;
+  letter-spacing: 0.16em !important;
   color: #f0f2d8 !important;
   white-space: nowrap;
   margin: 0;
+  flex-shrink: 0;
+  opacity: 0.92;
   text-shadow: 0 2px 16px rgba(0, 0, 0, 0.85);
+}
+
+/* Specific proportional sizing for multi-word headline rows to prevent text truncation */
+.hero_row_kavach .hero_row_text h1 {
+  font-size: clamp(2.1rem, 6.8vw, 13.5vh);
+  letter-spacing: -0.035em !important;
+}
+
+.hero_row_trust .hero_row_text h1 {
+  font-size: clamp(1.9rem, 6.1vw, 12vh);
+  letter-spacing: -0.04em !important;
 }
 
 .hero_row_separator {
@@ -3309,4 +3324,83 @@ b {
   font-weight: 800 !important;
   letter-spacing: -0.03em !important;
   line-height: 0.95 !important;
+}
+
+/* ==========================================================================
+   18. TOP 1% PARALLAX & 3D SPATIAL DEPTH SYSTEM
+   ========================================================================== */
+
+/* GPU Hardware Acceleration for buttery 120fps parallax */
+.parallax-gpu {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 3D Perspective Card Tilt Container */
+.has-parallax-tilt {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+/* Tilt target card base */
+.tilt-parallax-target {
+  transform-style: preserve-3d;
+  will-change: transform;
+  position: relative;
+}
+
+/* Live dynamic specular sheen layer */
+.card-parallax-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: 10;
+  mix-blend-mode: overlay;
+}
+
+/* 3D Elevated children inside tilted cards */
+.tilt-parallax-target .metric-val,
+.tilt-parallax-target .trilemma-badge,
+.tilt-parallax-target .card-title,
+.tilt-parallax-target .halftone-title,
+.tilt-parallax-target .pill-tag {
+  transform: translateZ(24px);
+  transform-style: preserve-3d;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tilt-parallax-target:hover {
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.22), 0 0 1px 1px rgba(7, 6, 7, 0.08) !important;
+}
+
+.section {
+  position: relative;
+}
+
+/* Kinetic Hero Rows Parallax Optimization */
+.hero_row {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.hero_row_text {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Respect user's accessibility motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-parallax-glyph,
+  .hero_row_text,
+  .tilt-parallax-target,
+  .parallax-gpu {
+    transform: none !important;
+    will-change: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
 }
