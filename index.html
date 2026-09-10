@@ -45,38 +45,32 @@
           <span class="item-divider"></span>
         </a>
 
-        <a class="menu-item sans" href="#sandbox">
-          <span class="item-index">03</span>
-          <span class="item-label">PII Sandbox</span>
-          <span class="item-divider"></span>
-        </a>
-
         <a class="menu-item" href="#architecture">
-          <span class="item-index">04</span>
+          <span class="item-index">03</span>
           <span class="item-label">Architecture</span>
           <span class="item-divider"></span>
         </a>
 
         <a class="menu-item" href="#egress-guard">
-          <span class="item-index">05</span>
+          <span class="item-index">04</span>
           <span class="item-label">Egress Guard</span>
           <span class="item-divider"></span>
         </a>
 
         <a class="menu-item sans" href="#benchmarks">
-          <span class="item-index">06</span>
+          <span class="item-index">05</span>
           <span class="item-label">Benchmarks</span>
           <span class="item-divider"></span>
         </a>
 
         <a class="menu-item" href="#dpdp">
-          <span class="item-index">07</span>
+          <span class="item-index">06</span>
           <span class="item-label">DPDP 2023</span>
           <span class="item-divider"></span>
         </a>
 
         <a class="menu-item sans" href="#qa">
-          <span class="item-index">08</span>
+          <span class="item-index">07</span>
           <span class="item-label">Judge Q&A</span>
           <span class="item-divider"></span>
         </a>
@@ -144,7 +138,7 @@
 
       <div class="hero-actions">
         <a href="#diff-section" class="btn btn-primary">LAUNCH LIVE SCREEN DIFF</a>
-        <a href="#sandbox" class="btn btn-secondary">TEST KAVACH REDACTOR</a>
+        <a href="#architecture" class="btn btn-secondary">EXPLORE ARCHITECTURE</a>
       </div>
 
       <div class="hero-annotation">SMART INDIA HACKATHON 2026 · GRAND FINALE ARCHITECTURE</div>
@@ -902,122 +896,6 @@
     </div>
   </section>
 
-  <!-- ==================== LIVE PII REDACTION SANDBOX ==================== -->
-  <section class="section section-alt" id="sandbox">
-    <div class="container">
-      <div class="section-heading text-center">
-        <div class="pill-tag">Interactive Hardware-Software Test</div>
-        <h2 class="section-title">Live KAVACH Redaction Sandbox</h2>
-        <p class="section-subtitle">
-          Test the client-side redaction engine in real time. Enter real or synthetic identifiers to test our
-          mathematical checksum algorithms (Verhoeff for Aadhaar, Luhn for Cards) and zero-shot tokenization.
-        </p>
-      </div>
-
-      <div class="sandbox-container card">
-        <div class="sandbox-grid">
-
-          <!-- Interactive Input Panel -->
-          <div class="sandbox-input-pane">
-            <h3 class="pane-title">Test Your Identifier</h3>
-            <p class="text-muted text-sm" style="margin-bottom: 20px;">
-              Select a category or type raw data. Calculations run entirely client-side via WebCrypto and JavaScript
-              algorithms.
-            </p>
-
-            <div class="sample-pills-group">
-              <span class="sample-label">Try synthetic samples:</span>
-              <button class="pill-btn" data-sample="aadhaar-valid">Valid Aadhaar</button>
-              <button class="pill-btn" data-sample="aadhaar-invalid">Invalid Aadhaar</button>
-              <button class="pill-btn" data-sample="pan">Valid PAN</button>
-              <button class="pill-btn" data-sample="card">Luhn Card</button>
-              <button class="pill-btn" data-sample="email">Email Address</button>
-            </div>
-
-            <div class="input-form-group">
-              <label class="input-label" for="sandbox-input">Raw Text / Secret String</label>
-              <input type="text" id="sandbox-input" class="sandbox-text-input"
-                placeholder="Type an Aadhaar, PAN, Card, or Email..." value="5489 1243 9871">
-            </div>
-
-            <div class="input-form-group">
-              <label class="input-label">Originating Form Field Context</label>
-              <div class="context-pill-group">
-                <label class="radio-chip"><input type="radio" name="origin-context" value="aadhaar-field" checked>
-                  input[name="aadhaar"]</label>
-                <label class="radio-chip"><input type="radio" name="origin-context" value="pan-field">
-                  input[name="pan"]</label>
-                <label class="radio-chip"><input type="radio" name="origin-context" value="generic-text">
-                  textarea[name="bio"]</label>
-              </div>
-            </div>
-
-            <div class="engine-features-note">
-              <div class="feature-item">
-                <span class="feature-icon">🛡️</span>
-                <span><strong>Verhoeff Checksum:</strong> Prevents 90% of false positives by mathematically validating
-                  the 12th digit dihedral D5 group check.</span>
-              </div>
-              <div class="feature-item">
-                <span class="feature-icon">🔒</span>
-                <span><strong>Sink-Binding Tokenizer:</strong> Generates irreversible session tokens mapped solely to
-                  the origin field.</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Live Output & Diagnostics Panel -->
-          <div class="sandbox-output-pane">
-            <div class="output-header">
-              <span class="output-title">KAVACH Real-Time Verdict</span>
-              <span class="latency-pill" id="sandbox-latency">~0.42 ms</span>
-            </div>
-
-            <div class="verdict-result-card" id="verdict-card">
-              <div class="verdict-primary-status">
-                <div class="status-icon-circle" id="verdict-icon">✓</div>
-                <div>
-                  <h4 class="verdict-headline" id="verdict-headline">Detected: Indian Aadhaar Number</h4>
-                  <p class="verdict-sub" id="verdict-sub">Checksum verification: PASS (Verhoeff Dihedral Check)</p>
-                </div>
-              </div>
-
-              <div class="token-generation-box">
-                <div class="token-gen-label">Generated Wire Token (Safe for Transmission):</div>
-                <div class="token-display" id="generated-token">⟦AADHAAR_1⟧</div>
-              </div>
-
-              <div class="diagnostics-grid">
-                <div class="diag-item">
-                  <span class="diag-label">Validation Engine:</span>
-                  <span class="diag-val" id="diag-engine">L1 Checksum (Verhoeff)</span>
-                </div>
-                <div class="diag-item">
-                  <span class="diag-label">Precision Guard:</span>
-                  <span class="diag-val text-success" id="diag-precision">99.8% Match</span>
-                </div>
-                <div class="diag-item">
-                  <span class="diag-label">Vault Policy:</span>
-                  <span class="diag-val" id="diag-vault">Reversible (Sink-Bound)</span>
-                </div>
-                <div class="diag-item">
-                  <span class="diag-label">Allowed Sink:</span>
-                  <span class="diag-val font-mono" id="diag-sink">#e17 on pmkisan.gov.in</span>
-                </div>
-              </div>
-
-              <div class="wire-simulation-box">
-                <div class="wire-sim-label">Simulated Egress Payload:</div>
-                <code class="wire-sim-code"
-                  id="wire-sim-code">{"op": "type", "target": "e17", "value_ref": "⟦AADHAAR_1⟧"}</code>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ==================== DUAL-REALITY REDACTION RUNTIME ==================== -->
   <section class="section" id="architecture">
@@ -1710,7 +1588,7 @@
           <div class="footer-col">
             <span class="footer-col-title">Demonstration</span>
             <a href="#diff-section">What Server Saw</a>
-            <a href="#sandbox">PII Sandbox</a>
+            <a href="#architecture">Runtime Architecture</a>
             <a href="#egress-guard">Egress Guard</a>
             <a href="#benchmarks">Canary Runner</a>
           </div>
