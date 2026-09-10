@@ -57,32 +57,26 @@
           <span class="item-divider"></span>
         </a>
 
-        <a class="menu-item sans" href="#tier-controller">
-          <span class="item-index">05</span>
-          <span class="item-label">Adaptive Tiers</span>
-          <span class="item-divider"></span>
-        </a>
-
         <a class="menu-item" href="#egress-guard">
-          <span class="item-index">06</span>
+          <span class="item-index">05</span>
           <span class="item-label">Egress Guard</span>
           <span class="item-divider"></span>
         </a>
 
         <a class="menu-item sans" href="#benchmarks">
-          <span class="item-index">07</span>
+          <span class="item-index">06</span>
           <span class="item-label">Benchmarks</span>
           <span class="item-divider"></span>
         </a>
 
         <a class="menu-item" href="#dpdp">
-          <span class="item-index">08</span>
+          <span class="item-index">07</span>
           <span class="item-label">DPDP 2023</span>
           <span class="item-divider"></span>
         </a>
 
         <a class="menu-item sans" href="#qa">
-          <span class="item-index">09</span>
+          <span class="item-index">08</span>
           <span class="item-label">Judge Q&A</span>
           <span class="item-divider"></span>
         </a>
@@ -1141,86 +1135,6 @@
 
 
 
-  <!-- ==================== ADAPTIVE PERCEPTION CONTROLLER (TIERS) ==================== -->
-  <section class="section section-alt" id="tier-controller">
-    <div class="container">
-      <div class="section-heading text-center">
-        <div class="pill-tag">Requirement R8 · Latency vs Accuracy</div>
-        <h2 class="section-title">The Adaptive Perception Controller</h2>
-        <p class="section-subtitle">
-          Instead of naively uploading heavy 180 KB screenshots on every step, PRAHARI dynamically escalates through a
-          3-tier perception ladder based on screen entropy and ambiguity.
-        </p>
-      </div>
-
-      <div class="tier-interactive-card card">
-        <div class="tier-selection-bar">
-          <button class="tier-nav-btn active" data-tier="0">
-            <span class="tier-tag">TIER 0</span>
-            <span class="tier-nav-title">Local Autonomy</span>
-            <span class="tier-nav-meta">0 Bytes · 107 ms</span>
-          </button>
-          <button class="tier-nav-btn" data-tier="1">
-            <span class="tier-tag">TIER 1 (DEFAULT)</span>
-            <span class="tier-nav-title">Structured Graph</span>
-            <span class="tier-nav-meta">6 KB · 734 ms</span>
-          </button>
-          <button class="tier-nav-btn" data-tier="2">
-            <span class="tier-tag">TIER 2</span>
-            <span class="tier-nav-title">Visual Grounding</span>
-            <span class="tier-nav-meta">55 KB · 1,468 ms</span>
-          </button>
-        </div>
-
-        <div class="tier-display-content">
-          <div class="tier-info-pane">
-            <div class="tier-header-group">
-              <h3 class="tier-active-title" id="tier-title">Tier 0: Local Autonomy</h3>
-              <p class="tier-active-desc" id="tier-desc">
-                When the next action is unambiguous from the DOM and local policy (scrolling to reveal elements,
-                dismissing cookie banners, or clicking single primary buttons), the local stack executes with
-                <strong>zero network egress</strong>.
-              </p>
-            </div>
-
-            <div class="tier-metrics-row">
-              <div class="tier-metric-item">
-                <span class="tm-label">Transmitted Payload:</span>
-                <span class="tm-val text-success" id="tier-payload">0 Bytes (Zero Egress)</span>
-              </div>
-              <div class="tier-metric-item">
-                <span class="tm-label">p50 Step Latency:</span>
-                <span class="tm-val" id="tier-latency">~107 ms</span>
-              </div>
-              <div class="tier-metric-item">
-                <span class="tm-label">Frequency in Tasks:</span>
-                <span class="tm-val" id="tier-freq">30–40% of all steps</span>
-              </div>
-            </div>
-
-            <div class="tier-rule-note" id="tier-rule">
-              <strong>Guardrail:</strong> Tier 0 is prohibited from executing high-risk actions (e.g. form submissions,
-              payments, cross-origin navigation). Any ambiguity escalates to Tier 1 immediately.
-            </div>
-          </div>
-
-          <!-- Visual Latency Bar -->
-          <div class="tier-latency-breakdown-pane">
-            <h4 class="breakdown-title">Step Latency Budget Allocation</h4>
-            <div class="latency-bar-container" id="latency-bars">
-              <!-- Dynamically rendered via JS -->
-            </div>
-            <div class="latency-legend" id="latency-legend">
-              <div class="legend-item"><span class="legend-box bg-blue"></span> Local Perception</div>
-              <div class="legend-item"><span class="legend-box bg-green"></span> Privacy / Redaction</div>
-              <div class="legend-item"><span class="legend-box bg-orange"></span> Server Planning</div>
-              <div class="legend-item"><span class="legend-box bg-indigo"></span> Execution & Verify</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ==================== THE 8-CHECK EGRESS GUARD ==================== -->
   <section class="section" id="egress-guard">

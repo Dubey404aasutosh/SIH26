@@ -286,98 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ==========================================================================
-     6. ADAPTIVE TIER CONTROLLER (APC)
-     ========================================================================== */
-  const tierBtns = document.querySelectorAll('.tier-nav-btn');
-  const tierTitle = document.getElementById('tier-title');
-  const tierDesc = document.getElementById('tier-desc');
-  const tierPayload = document.getElementById('tier-payload');
-  const tierLatency = document.getElementById('tier-latency');
-  const tierFreq = document.getElementById('tier-freq');
-  const tierRule = document.getElementById('tier-rule');
-  const latencyBars = document.getElementById('latency-bars');
-
-  const tierData = {
-    0: {
-      title: 'Tier 0: Local Autonomy',
-      desc: 'When the next action is unambiguous from the DOM and local policy (scrolling to reveal elements, dismissing cookie banners, or clicking single primary buttons), the local stack executes with zero network egress.',
-      payload: '0 Bytes (Zero Network Egress)',
-      latency: '~107 ms',
-      freq: '30–40% of all steps',
-      rule: '<strong>Guardrail:</strong> Tier 0 is prohibited from executing high-risk actions (e.g. form submissions, payments, cross-origin navigation). Any ambiguity escalates to Tier 1 immediately.',
-      bars: [
-        { width: '25%', bg: 'var(--accent-blue)', label: 'Perceive: 20ms' },
-        { width: '10%', bg: 'var(--accent-green)', label: 'KAVACH: 5ms' },
-        { width: '35%', bg: 'var(--accent-orange)', label: 'Local Reason: 35ms' },
-        { width: '30%', bg: 'var(--accent-indigo)', label: 'Act & Verify: 37ms' }
-      ]
-    },
-    1: {
-      title: 'Tier 1: Structured Screen Graph (Default)',
-      desc: 'For DOM-rich web pages where text and element bounding boxes fully explain the page. Transmits only a compact, typed JSON schema containing element IDs and tokens. No visual pixels are uploaded.',
-      payload: '6.3 KB avg (JSON)',
-      latency: '~734 ms',
-      freq: '50–60% of all steps',
-      rule: '<strong>Advantage:</strong> Cuts bandwidth by 30× compared to cloud screenshots. The server VLM runs on a text-only fast path, doubling response velocity.',
-      bars: [
-        { width: '8%', bg: 'var(--accent-blue)', label: 'Extract: 35ms' },
-        { width: '12%', bg: 'var(--accent-green)', label: 'KAVACH: 42ms' },
-        { width: '68%', bg: 'var(--accent-orange)', label: 'MANTRI (Text-Fast): 620ms' },
-        { width: '12%', bg: 'var(--accent-indigo)', label: 'Act: 37ms' }
-      ]
-    },
-    2: {
-      title: 'Tier 2: Visual Grounding + Redacted JPEG',
-      desc: 'Escalated automatically when unexplained pixels exceed 0.5% (canvas applications, video players, PDF previews, or after consecutive action failures). Transmits the SSG plus a 768px JPEG with CAPED-style visible markers.',
-      payload: '55 KB avg (SSG + Redacted JPEG)',
-      latency: '~1,468 ms',
-      freq: '10–15% of all steps',
-      rule: '<strong>Safety Guarantee:</strong> All faces are Gaussian blurred (σ=0.12) and PII regions are filled with #2B3A4A solid masks before JPEG encoding.',
-      bars: [
-        { width: '18%', bg: 'var(--accent-blue)', label: 'Perceive/YOLO: 152ms' },
-        { width: '14%', bg: 'var(--accent-green)', label: 'Canvas Mask: 99ms' },
-        { width: '60%', bg: 'var(--accent-orange)', label: 'MANTRI (VLM Path): 1,180ms' },
-        { width: '8%', bg: 'var(--accent-indigo)', label: 'Act: 37ms' }
-      ]
-    }
-  };
-
-  function updateTierDisplay(tierId) {
-    const data = tierData[tierId];
-    if (!data) return;
-
-    tierTitle.textContent = data.title;
-    tierDesc.textContent = data.desc;
-    tierPayload.textContent = data.payload;
-    tierLatency.textContent = data.latency;
-    tierFreq.textContent = data.freq;
-    tierRule.innerHTML = data.rule;
-
-    // Render Bars
-    latencyBars.innerHTML = '';
-    data.bars.forEach(b => {
-      const segment = document.createElement('div');
-      segment.className = 'bar-segment';
-      segment.style.width = b.width;
-      segment.style.backgroundColor = b.bg;
-      segment.title = b.label;
-      latencyBars.appendChild(segment);
-    });
-  }
-
-  tierBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      tierBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const tierId = parseInt(btn.getAttribute('data-tier'), 10);
-      updateTierDisplay(tierId);
-    });
-  });
-
-  // Initialize with Tier 0
-  updateTierDisplay(0);
-
-  /* ==========================================================================
      7. EGRESS GUARD SIMULATOR (CHECK #2 FAIL-CLOSED INJECTION)
      ========================================================================== */
   const btnInjectLeak = document.getElementById('btn-inject-leak');
@@ -1245,7 +1153,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (window.matchMedia("(pointer: coarse)").matches) return; // Skip touch screens
 
       const tiltCards = document.querySelectorAll(
-        ".metric-card, .trilemma-card, .hero-device-card, .tier-interactive-card, .canary-stat-card, .qa-card"
+        ".metric-card, .trilemma-card, .hero-device-card, .canary-stat-card, .qa-card"
       );
 
       tiltCards.forEach((card) => {
