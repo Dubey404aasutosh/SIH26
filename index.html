@@ -18,7 +18,7 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400..700;1,400..700&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css?v=2.4">
+  <link rel="stylesheet" href="styles.css?v=2.6">
 
   <!-- CSS stylesheet CDN libraries (Splitting.js Grid Cell Matrix ss-16) -->
   <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css" />
@@ -32,50 +32,195 @@
 
   <!-- ==================== OBSCURA OVERLAY NAVIGATION MENU ==================== -->
   <nav class="menu" id="obscura-menu" aria-hidden="true">
+    <!-- SVG Curved Morphing Curtain Layer (Awwwards Fluid Curve) -->
+    <svg class="menu-curve-svg" id="menu-curve-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <path id="menu-curve-path" d="M 0 0 L 100 0 L 100 0 Q 50 0 0 0 Z" fill="#090a0d"></path>
+    </svg>
+
     <div class="menu-bg"></div>
+    <div class="menu-cursor-follower" id="menu-cursor-follower" aria-hidden="true"></div>
+
+    <!-- Floating Interactive Preview Card Stage -->
+    <div class="menu-preview-stage" id="menu-preview-stage" aria-hidden="true">
+      <div class="menu-preview-card" id="menu-preview-card">
+        <div class="preview-card-header">
+          <span class="preview-badge" id="preview-badge">PROTOCOL 01</span>
+          <span class="preview-status"><span class="live-dot live-dot--ember"></span>ACTIVE</span>
+        </div>
+        <div class="preview-metric" id="preview-metric">ZERO-LEAK PRIVACY</div>
+        <div class="preview-sub" id="preview-sub">WebGPU On-Device · Indian Checksum Pack</div>
+      </div>
+    </div>
 
     <div class="menu-container">
+      <div class="menu-meta">
+        <div class="menu-meta-group">
+          <span class="live-dot live-dot--ember"></span>
+          <span class="menu-meta-label">PRAHARI NAVIGATION</span>
+        </div>
+        <span class="menu-meta-label">07 DESTINATIONS · DUAL-REALITY RUNTIME</span>
+      </div>
+
       <div class="menu-items">
-        <a class="menu-item" href="#problem">
-          <span class="item-index">01</span>
-          <span class="item-label">The Problem</span>
-          <span class="item-divider"></span>
+        <a class="menu-item" href="#hero"
+           data-badge="FOUNDATION · V3.0"
+           data-metric="ZERO-LEAK PRIVACY"
+           data-sub="WebGPU On-Device · Indian Checksum Pack">
+          <div class="item-left">
+            <div class="item-roll-box">
+              <span class="item-label-primary">The Thesis</span>
+              <span class="item-label-secondary" aria-hidden="true">The Thesis</span>
+            </div>
+            <span class="item-subheading">Privacy-Preserving Agentic Vision Architecture</span>
+          </div>
+          <div class="item-right">
+            <span class="item-tag">SEC.01</span>
+            <span class="item-index">01</span>
+            <div class="item-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+          </div>
         </a>
 
-        <a class="menu-item sans" href="#diff-section">
-          <span class="item-index">02</span>
-          <span class="item-label">Live Diff</span>
-          <span class="item-divider"></span>
+        <a class="menu-item" href="#problem"
+           data-badge="TRILEMMA · PROOF"
+           data-metric="PRIVACY vs REASONING"
+           data-sub="Catastrophic Cloud Leak vs Local Dumb Agent">
+          <div class="item-left">
+            <div class="item-roll-box">
+              <span class="item-label-primary">The Trilemma</span>
+              <span class="item-label-secondary" aria-hidden="true">The Trilemma</span>
+            </div>
+            <span class="item-subheading">Cloud vs Local vs Hybrid Benchmark Comparison</span>
+          </div>
+          <div class="item-right">
+            <span class="item-tag">SEC.02</span>
+            <span class="item-index">02</span>
+            <div class="item-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+          </div>
         </a>
 
-        <a class="menu-item" href="#architecture">
-          <span class="item-index">03</span>
-          <span class="item-label">Architecture</span>
-          <span class="item-divider"></span>
+        <a class="menu-item" href="#architecture"
+           data-badge="ENGINEERING · STACK"
+           data-metric="6 CORE PILLARS"
+           data-sub="NETRA · KAVACH · SETU · MANTRI · HASTA · LEKHA">
+          <div class="item-left">
+            <div class="item-roll-box">
+              <span class="item-label-primary">Six Pillars</span>
+              <span class="item-label-secondary" aria-hidden="true">Six Pillars</span>
+            </div>
+            <span class="item-subheading">Complete End-to-End Cryptographic Runtime</span>
+          </div>
+          <div class="item-right">
+            <span class="item-tag">SEC.03</span>
+            <span class="item-index">03</span>
+            <div class="item-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+          </div>
         </a>
 
-        <a class="menu-item" href="#egress-guard">
-          <span class="item-index">04</span>
-          <span class="item-label">Egress Guard</span>
-          <span class="item-divider"></span>
+        <a class="menu-item" href="#diff-section"
+           data-badge="INTERACTIVE · FORENSIC"
+           data-metric="DUAL REALITY SPLIT"
+           data-sub="Raw User DOM vs Masked 6 KB Wire Payload">
+          <div class="item-left">
+            <div class="item-roll-box">
+              <span class="item-label-primary">What the Server Saw</span>
+              <span class="item-label-secondary" aria-hidden="true">What the Server Saw</span>
+            </div>
+            <span class="item-subheading">Side-by-Side Live Cryptographic Wire Inspection</span>
+          </div>
+          <div class="item-right">
+            <span class="item-tag">SEC.04</span>
+            <span class="item-index">04</span>
+            <div class="item-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+          </div>
         </a>
 
-        <a class="menu-item sans" href="#benchmarks">
-          <span class="item-index">05</span>
-          <span class="item-label">Benchmarks</span>
-          <span class="item-divider"></span>
+        <a class="menu-item" href="#egress-guard"
+           data-badge="SECURITY · INVARIANTS"
+           data-metric="8-CHECK GATEKEEPER"
+           data-sub="Strict Fail-Closed Pre-Transmission Verification">
+          <div class="item-left">
+            <div class="item-roll-box">
+              <span class="item-label-primary">Egress Guard</span>
+              <span class="item-label-secondary" aria-hidden="true">Egress Guard</span>
+            </div>
+            <span class="item-subheading">Mathematical Assurance Against Data Exfiltration</span>
+          </div>
+          <div class="item-right">
+            <span class="item-tag">SEC.05</span>
+            <span class="item-index">05</span>
+            <div class="item-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+          </div>
         </a>
 
-        <a class="menu-item" href="#dpdp">
-          <span class="item-index">06</span>
-          <span class="item-label">DPDP 2023</span>
-          <span class="item-divider"></span>
+        <a class="menu-item" href="#benchmarks"
+           data-badge="PERFORMANCE · METRICS"
+           data-metric="CANARY SUITE RUNNER"
+           data-sub="60 Attack Vectors · 0 Bytes Leaked · 4.8 FPS">
+          <div class="item-left">
+            <div class="item-roll-box">
+              <span class="item-label-primary">Benchmarks</span>
+              <span class="item-label-secondary" aria-hidden="true">Benchmarks</span>
+            </div>
+            <span class="item-subheading">Automated Redaction &amp; Latency Ablation Suite</span>
+          </div>
+          <div class="item-right">
+            <span class="item-tag">SEC.06</span>
+            <span class="item-index">06</span>
+            <div class="item-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+          </div>
         </a>
 
-        <a class="menu-item sans" href="#qa">
-          <span class="item-index">07</span>
-          <span class="item-label">Judge Q&A</span>
-          <span class="item-divider"></span>
+        <a class="menu-item" href="#qa"
+           data-badge="DEFENSE · AUDIT"
+           data-metric="JUDGE Q&amp;A READY"
+           data-sub="Air-Gapped Ready · DPDP Act 2023 Compliant">
+          <div class="item-left">
+            <div class="item-roll-box">
+              <span class="item-label-primary">Judge Q&amp;A</span>
+              <span class="item-label-secondary" aria-hidden="true">Judge Q&amp;A</span>
+            </div>
+            <span class="item-subheading">Technical Deep-Dive into Edge Cases &amp; Compliance</span>
+          </div>
+          <div class="item-right">
+            <span class="item-tag">SEC.07</span>
+            <span class="item-index">07</span>
+            <div class="item-arrow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </div>
+          </div>
         </a>
       </div>
     </div>
@@ -1638,7 +1783,7 @@
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
 
-  <script src="app.js?v=2.4"></script>
+  <script src="app.js?v=2.6"></script>
 </body>
 
 </html>

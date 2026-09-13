@@ -483,149 +483,220 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   /* ==========================================================================
-     12. OBSCURA STAGGERED TEXT REVEAL OVERLAY MENU ANIMATION
+     12. OBSCURA STAGGERED TEXT REVEAL OVERLAY MENU ANIMATION (AWWWARDS GRADE)
      ========================================================================== */
   const initObscuraMenu = () => {
     const menu = document.getElementById("obscura-menu");
     const menuBg = menu ? menu.querySelector(".menu-bg") : null;
+    const menuMeta = menu ? menu.querySelector(".menu-meta") : null;
     const menuItems = menu ? menu.querySelectorAll(".menu-item") : [];
+    const follower = document.getElementById("menu-cursor-follower");
     const navToggler = document.getElementById("nav-toggler");
+    const curvePath = document.getElementById("menu-curve-path");
+
+    // Preview Card Stage Elements
+    const previewStage = document.getElementById("menu-preview-stage");
+    const previewBadge = document.getElementById("preview-badge");
+    const previewMetric = document.getElementById("preview-metric");
+    const previewSub = document.getElementById("preview-sub");
+    const previewCard = document.getElementById("menu-preview-card");
 
     if (!menu || !navToggler) return;
 
-    // Helper: Split text into masked characters
-    const splitIntoMaskedChars = (element) => {
-      const text = element.textContent;
-      element.innerHTML = "";
-      const chars = [];
-      for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        const mask = document.createElement("span");
-        mask.className = "char-mask";
-        mask.style.display = "inline-block";
-        mask.style.overflow = "hidden";
-        mask.style.verticalAlign = "bottom";
+    // ── 1. FLUID MAGNETIC CURSOR & FLOATING PREVIEW CARD PHYSICS ──
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let prevMouseX = mouseX;
+    let posX = mouseX;
+    let posY = mouseY;
 
-        const inner = document.createElement("span");
-        inner.className = "char";
-        inner.style.display = "inline-block";
-        inner.textContent = char === " " ? "\u00A0" : char;
+    let cardX = mouseX;
+    let cardY = mouseY;
+    let currentTilt = 0;
+    let isHoveringLink = false;
+    let cursorRaf = null;
 
-        mask.appendChild(inner);
-        element.appendChild(mask);
-        chars.push(inner);
+    const renderCursorAndPreview = () => {
+      // 1. Follower Lerp
+      posX += (mouseX - posX) * 0.18;
+      posY += (mouseY - posY) * 0.18;
+      if (follower) {
+        follower.style.transform = `translate3d(${posX}px, ${posY}px, 0) translate(-50%, -50%)`;
       }
-      return chars;
-    };
 
-    // Helper: Split text into masked word
-    const splitIntoMaskedWord = (element) => {
-      const text = element.textContent.trim();
-      element.innerHTML = "";
-      const mask = document.createElement("span");
-      mask.className = "word-mask";
-      mask.style.display = "inline-block";
-      mask.style.overflow = "hidden";
-      mask.style.verticalAlign = "bottom";
+      // 2. Preview Card Floating Physics (Spring + Velocity Tilt)
+      if (previewStage && previewCard && isHoveringLink) {
+        let targetCardX = mouseX + 160;
+        let targetCardY = mouseY - 50;
 
-      const inner = document.createElement("span");
-      inner.className = "word";
-      inner.style.display = "inline-block";
-      inner.textContent = text;
-
-      mask.appendChild(inner);
-      element.appendChild(mask);
-      return [inner];
-    };
-
-    let tl = null;
-
-    // Setup the split text masking animation
-    const setupMenuAnimation = () => {
-      const items = Array.from(menuItems).map((item) => {
-        const index = item.querySelector(".item-index");
-        const label = item.querySelector(".item-label");
-        const divider = item.querySelector(".item-divider");
-
-        const chars = splitIntoMaskedChars(label);
-        const [firstChar, ...trailingChars] = chars;
-
-        const trailingCharBox = document.createElement("span");
-        trailingCharBox.className = "item-body";
-        trailingCharBox.style.display = "inline-block";
-        trailingCharBox.style.whiteSpace = "nowrap";
-        trailingCharBox.style.overflow = "hidden";
-
-        trailingChars.forEach((char) => {
-          if (char.parentElement) {
-            trailingCharBox.appendChild(char.parentElement);
-          }
-        });
-        label.after(trailingCharBox);
-
-        // Natural width measured before setting width to 0
-        const bodyWidth = trailingCharBox.offsetWidth || trailingCharBox.scrollWidth;
-
-        const indexWord = index ? splitIntoMaskedWord(index) : [];
-
-        // Initial state setters via GSAP
-        if (typeof gsap !== "undefined") {
-          gsap.set([indexWord, firstChar], { yPercent: 100 });
-          gsap.set(trailingChars, { xPercent: 125 });
-          gsap.set(trailingCharBox, { width: 0 });
-          gsap.set(divider, { scaleY: 0 });
+        // Viewport clamping
+        const cardWidth = 300;
+        const cardHeight = 130;
+        if (targetCardX + cardWidth / 2 > window.innerWidth - 20) {
+          targetCardX = mouseX - 160;
+        }
+        if (targetCardY - cardHeight / 2 < 20) {
+          targetCardY = mouseY + 60;
         }
 
-        return { indexWord, firstChar, trailingChars, trailingCharBox, bodyWidth, divider };
+        cardX += (targetCardX - cardX) * 0.12;
+        cardY += (targetCardY - cardY) * 0.12;
+
+        const velocityX = mouseX - prevMouseX;
+        prevMouseX = mouseX;
+
+        const targetTilt = Math.max(-14, Math.min(14, velocityX * 0.75));
+        currentTilt += (targetTilt - currentTilt) * 0.14;
+
+        previewStage.style.transform = `translate3d(${cardX}px, ${cardY}px, 0) translate(-50%, -50%)`;
+        previewCard.style.transform = `rotate(${currentTilt.toFixed(2)}deg)`;
+      }
+
+      cursorRaf = requestAnimationFrame(renderCursorAndPreview);
+    };
+
+    window.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    // ── 2. PREVIEW CARD HOVER BINDINGS ──
+    menuItems.forEach((item) => {
+      item.addEventListener("mouseenter", () => {
+        isHoveringLink = true;
+
+        const badge = item.getAttribute("data-badge");
+        const metric = item.getAttribute("data-metric");
+        const sub = item.getAttribute("data-sub");
+
+        if (previewBadge && badge) previewBadge.textContent = badge;
+        if (previewMetric && metric) previewMetric.textContent = metric;
+        if (previewSub && sub) previewSub.textContent = sub;
+
+        if (previewStage) previewStage.classList.add("is-visible");
+        if (follower) follower.classList.add("is-hovering");
       });
 
-      // Master Animation Timeline Configuration (Dual-Velocity State Machine)
-      tl = (typeof gsap !== "undefined")
-        ? gsap.timeline({
-          paused: true,
-          defaults: { ease: "power3.out" },
-          onReverseComplete: () => {
-            menu.classList.remove("is-menu-open");
-            menu.style.pointerEvents = "";
-          },
-        })
-        : null;
+      item.addEventListener("mouseleave", () => {
+        isHoveringLink = false;
+        if (previewStage) previewStage.classList.remove("is-visible");
+        if (follower) follower.classList.remove("is-hovering");
+      });
+    });
 
-      if (tl) {
-        // Backdrop Reveal
-        tl.to(menuBg, { opacity: 1, duration: 0.65 }, 0);
+    // ── 3. SVG CURVED MORPHING TIMELINE (Awwwards Fluid Curve) ──
+    let tl = null;
+    const curveProgress = { y: 0, bulge: 0 };
 
-        // Staggered Item Animation Sequence
-        items.forEach(
-          ({ indexWord, firstChar, trailingChars, trailingCharBox, bodyWidth, divider }, i) => {
-            const startTime = 0.25 + i * 0.08;
+    const updateSvgCurve = () => {
+      if (!curvePath) return;
+      const y = curveProgress.y;
+      const b = curveProgress.bulge;
+      // Quadratic Bézier curve from (0, y) through control point (50, y + b) to (100, y)
+      curvePath.setAttribute("d", `M 0 0 L 100 0 L 100 ${y} Q 50 ${y + b} 0 ${y} Z`);
+    };
 
-            tl.to([indexWord, firstChar], { yPercent: 0, duration: 0.65 }, startTime)
-              .to(
-                divider,
-                { scaleY: 1, duration: 0.75, ease: "power3.out" },
-                startTime + 0.04
-              )
-              .to(
-                trailingCharBox,
-                {
-                  width: bodyWidth,
-                  duration: 0.75,
-                  ease: "power4.inOut",
-                },
-                startTime + 0.12
-              )
-              .to(
-                trailingChars,
-                { xPercent: 0, duration: 0.65, stagger: 0.025 },
-                startTime + 0.25
-              );
-          }
+    const setupMenuAnimation = () => {
+      if (typeof gsap === "undefined") return;
+
+      tl = gsap.timeline({
+        paused: true,
+        defaults: { ease: "power3.out" },
+        onReverseComplete: () => {
+          menu.classList.remove("is-menu-open");
+          menu.style.pointerEvents = "";
+          if (cursorRaf) cancelAnimationFrame(cursorRaf);
+          cursorRaf = null;
+        },
+      });
+
+      // Step A: SVG Curved Curtain Reveal
+      tl.fromTo(
+        curveProgress,
+        { y: 0, bulge: 0 },
+        {
+          y: 100,
+          bulge: 38,
+          duration: 0.6,
+          ease: "power3.in",
+          onUpdate: updateSvgCurve,
+        },
+        0
+      ).to(
+        curveProgress,
+        {
+          bulge: 0,
+          duration: 0.45,
+          ease: "power2.out",
+          onUpdate: updateSvgCurve,
+        },
+        0.52
+      );
+
+      // Step B: Backdrop Fade & Blur
+      tl.to(menuBg, { opacity: 1, duration: 0.5 }, 0.2);
+
+      // Step C: Meta Top Header Entrance
+      if (menuMeta) {
+        tl.fromTo(
+          menuMeta,
+          { opacity: 0, y: -20 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+          0.35
+        );
+      }
+
+      // Step D: Staggered Menu Item Rows Entrance
+      tl.fromTo(
+        menuItems,
+        { opacity: 0, y: 36 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          stagger: 0.05,
+          ease: "power4.out",
+        },
+        0.38
+      );
+
+      // Step E: Arrow Pill Spin-in
+      const arrows = menu.querySelectorAll(".item-arrow");
+      if (arrows.length) {
+        tl.fromTo(
+          arrows,
+          { scale: 0, rotation: -90 },
+          { scale: 1, rotation: 0, duration: 0.5, stagger: 0.05, ease: "back.out(1.7)" },
+          0.45
         );
       }
     };
 
-    // Button Character Flicker Effect Helper
+    // ── 4. MAGNETIC TOGGLER BUTTON ──
+    let btnBounds = null;
+    const handleNavMagnetic = (e) => {
+      if (window.matchMedia("(pointer: coarse)").matches) return;
+      if (!btnBounds) btnBounds = navToggler.getBoundingClientRect();
+
+      const btnCenterX = btnBounds.left + btnBounds.width / 2;
+      const btnCenterY = btnBounds.top + btnBounds.height / 2;
+      const dist = Math.hypot(e.clientX - btnCenterX, e.clientY - btnCenterY);
+
+      if (dist < 75) {
+        const pullX = (e.clientX - btnCenterX) * 0.38;
+        const pullY = (e.clientY - btnCenterY) * 0.38;
+        navToggler.style.transform = `translate3d(${pullX.toFixed(1)}px, ${pullY.toFixed(1)}px, 0)`;
+      } else if (navToggler.style.transform && navToggler.style.transform !== "none") {
+        navToggler.style.transform = "translate3d(0, 0, 0)";
+      }
+    };
+
+    window.addEventListener("mousemove", handleNavMagnetic);
+    window.addEventListener("resize", () => {
+      btnBounds = null;
+    });
+
+    // ── 5. BUTTON CHARACTER FLICKER ──
     function flickerTextTo(element, text) {
       if (!element) return;
       if (typeof gsap === "undefined") {
@@ -633,10 +704,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const textStr = text;
       element.innerHTML = "";
       const chars = [];
-      for (let c of textStr) {
+      for (let c of text) {
         const span = document.createElement("span");
         span.textContent = c;
         span.style.display = "inline-block";
@@ -651,12 +721,12 @@ document.addEventListener('DOMContentLoaded', () => {
           duration: 0.04,
           ease: "power2.inOut",
           overwrite: true,
-          stagger: { amount: 0.18, from: "random" },
+          stagger: { amount: 0.16, from: "random" },
         }
       );
     }
 
-    // State Toggle
+    // ── 6. STATE TOGGLE ──
     let isMenuOpen = false;
 
     const openMenu = () => {
@@ -667,6 +737,16 @@ document.addEventListener('DOMContentLoaded', () => {
       menu.setAttribute("aria-hidden", "false");
       menu.style.pointerEvents = "auto";
       if (window.lenis) window.lenis.stop();
+
+      if (!cursorRaf) {
+        posX = mouseX;
+        posY = mouseY;
+        cardX = mouseX;
+        cardY = mouseY;
+        prevMouseX = mouseX;
+        renderCursorAndPreview();
+      }
+
       if (tl) {
         tl.timeScale(1).play();
       }
@@ -679,16 +759,17 @@ document.addEventListener('DOMContentLoaded', () => {
       menu.setAttribute("aria-hidden", "true");
       document.body.classList.remove("is-menu-open");
 
-      // Re-enable smooth scroll engine immediately
       if (window.lenis) window.lenis.start();
 
       if (fast || !tl) {
         menu.classList.remove("is-menu-open");
         menu.style.pointerEvents = "none";
         if (tl) tl.pause(0);
+        if (cursorRaf) cancelAnimationFrame(cursorRaf);
+        cursorRaf = null;
       } else {
         menu.style.pointerEvents = "none";
-        tl.timeScale(2.2).reverse();
+        tl.timeScale(2.4).reverse();
       }
       flickerTextTo(navToggler, "Menu");
     };
@@ -704,7 +785,6 @@ document.addEventListener('DOMContentLoaded', () => {
     closeObscuraMenu = closeMenu;
     window.closeObscuraMenu = closeMenu;
 
-    // Attach toggler listener IMMEDIATELY (no waiting for external fonts)
     navToggler.addEventListener("click", toggleMenu);
 
     // Auto close and smooth scroll when any menu link is clicked
@@ -712,7 +792,10 @@ document.addEventListener('DOMContentLoaded', () => {
       item.addEventListener("click", (e) => {
         e.preventDefault();
         const href = item.getAttribute("href");
-        navigateToSection(href);
+        closeMenu(false);
+        setTimeout(() => {
+          navigateToSection(href);
+        }, 320);
       });
     });
 
