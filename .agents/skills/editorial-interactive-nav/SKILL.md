@@ -148,7 +148,8 @@ Add these rules to your stylesheet (e.g., `navigation.css`):
 :root {
   --nav-accent: #FC5000;
   --nav-accent-glow: rgba(252, 80, 0, 0.6);
-  --nav-bg: rgba(9, 10, 15, 0.82);
+  --nav-bg: rgba(9, 10, 15, 0.52);
+  --nav-svg-fill: rgba(9, 10, 15, 0.40);
   --nav-text-primary: #f5f5f7;
   --nav-text-muted: rgba(255, 255, 255, 0.35);
   --nav-font-display: 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -178,10 +179,13 @@ Add these rules to your stylesheet (e.g., `navigation.css`):
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 104px;
-  box-shadow: 0 6px 24px rgba(252, 80, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  line-height: 1;
+  box-shadow: 0 0 20px rgba(252, 80, 0, 0.45);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+  user-select: none;
 }
 
 .nav-toggler:hover {
@@ -223,7 +227,7 @@ body.is-menu-open > section,
 body.is-menu-open > footer,
 body.is-menu-open > main,
 body.is-menu-open > header:not(.menu) {
-  filter: blur(16px);
+  filter: blur(8px);
   transform: scale(0.988);
 }
 
@@ -267,7 +271,7 @@ body.is-menu-open > header:not(.menu) {
 }
 
 .menu-curve-svg path {
-  fill: var(--nav-bg);
+  fill: var(--nav-svg-fill);
 }
 
 /* Frosted Glass Backdrop Layer */
@@ -275,8 +279,8 @@ body.is-menu-open > header:not(.menu) {
   position: fixed;
   inset: 0;
   background: var(--nav-bg);
-  backdrop-filter: blur(36px) saturate(180%);
-  -webkit-backdrop-filter: blur(36px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
   z-index: -2;
   opacity: 0;
   cursor: pointer;

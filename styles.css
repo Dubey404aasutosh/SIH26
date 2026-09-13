@@ -413,7 +413,7 @@ body.is-menu-open > section,
 body.is-menu-open > footer,
 body.is-menu-open > main,
 body.is-menu-open > div:not(#obscura-menu):not(.nav-toggler) {
-  filter: blur(16px);
+  filter: blur(8px);
   transform: scale(0.988);
 }
 
@@ -466,16 +466,16 @@ body.is-menu-open > div:not(#obscura-menu):not(.nav-toggler) {
 }
 
 .menu-curve-svg path {
-  fill: rgba(9, 10, 15, 0.82);
+  fill: rgba(9, 10, 15, 0.40);
 }
 
 /* Frosted Glass Backdrop Layer */
 .menu-bg {
   position: fixed;
   inset: 0;
-  background: rgba(9, 10, 15, 0.82);
-  backdrop-filter: blur(36px) saturate(180%);
-  -webkit-backdrop-filter: blur(36px) saturate(180%);
+  background: rgba(9, 10, 15, 0.52);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
   z-index: -2;
   opacity: 0;
   cursor: pointer;
@@ -588,6 +588,7 @@ body.is-menu-open > div:not(#obscura-menu):not(.nav-toggler) {
   letter-spacing: -0.024em;
   line-height: 1.14;
   color: #f5f5f7;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.65);
   display: inline-block;
   will-change: transform;
   transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
