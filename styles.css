@@ -344,127 +344,19 @@ pre,
 }
 
 /* --------------------------------------------------------------------------
-   6. TOP NAVIGATION — Floating Pill Header
+   6. TOP-RIGHT FIXED MENU TOGGLER
    -------------------------------------------------------------------------- */
-.site-header {
-  position: fixed;
-  top: 16px;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  width: 100%;
-  padding: 0 16px;
-  pointer-events: none;
-}
-
-.header-inner {
-  pointer-events: auto;
-  max-width: var(--page-max);
-  margin: 0 auto;
-  background-color: rgba(14, 13, 14, 0.78);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(240, 242, 216, 0.22);
-  border-radius: var(--radius-pill);
-  padding: 8px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-}
-
-.brand-group {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.brand-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.brand-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background-color: var(--marker-orange);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: none !important;
-}
-
-.brand-name {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.brand-pill {
-  font-family: var(--font-handwritten);
-  font-size: 13px;
-  font-weight: 700;
-  background-color: var(--color-sulfur);
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  color: var(--color-obsidian);
-  padding: 2px 10px;
-  border-radius: var(--radius-pill);
-  transform: rotate(-2deg);
-  display: none;
-}
-
-@media (min-width: 900px) {
-  .brand-pill {
-    display: inline-block;
-  }
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-
-.nav-link {
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(240, 242, 216, 0.78);
-  padding: 4px 2px;
-  transition: color 0.15s ease;
-}
-
-.nav-link:hover {
-  color: var(--marker-orange);
-  text-decoration: none;
-}
-
-.header-cta-group {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
 .nav-toggler {
   position: fixed;
-  top: clamp(20px, 3vh, 32px);
-  right: clamp(20px, 3vw, 40px);
-  z-index: 1000;
+  top: clamp(18px, 3vh, 32px);
+  right: clamp(18px, 3vw, 36px);
+  z-index: 1200;
   text-transform: uppercase;
   font-family: var(--font-sans);
   letter-spacing: 0.08em;
-  font-size: clamp(0.82rem, 0.9vw, 0.88rem);
+  font-size: 0.85rem;
   font-weight: 700;
-  padding: 0.65rem 1.65rem;
+  padding: 0.65rem 1.6rem;
   color: #ffffff;
   background: #FC5000;
   backdrop-filter: blur(16px);
@@ -478,7 +370,7 @@ pre,
   align-items: center;
   justify-content: center;
   min-width: 104px;
-  box-shadow: 0 6px 22px rgba(252, 80, 0, 0.42), 0 2px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6px 24px rgba(252, 80, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
@@ -486,12 +378,25 @@ pre,
   background: #ff6017;
   border-color: rgba(255, 255, 255, 0.65);
   color: #ffffff;
-  box-shadow: 0 10px 28px rgba(252, 80, 0, 0.6), 0 0 20px rgba(252, 80, 0, 0.45);
-  transform: translateY(-1.5px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(252, 80, 0, 0.65), 0 0 22px rgba(252, 80, 0, 0.5);
+  transform: translateY(-2px) scale(1.03);
 }
 
 .nav-toggler:active {
   transform: translateY(0px) scale(0.98);
+}
+
+body.is-menu-open .nav-toggler {
+  background: #252427;
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #f0f2d8;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+body.is-menu-open .nav-toggler:hover {
+  background: #FC5000;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 /* --------------------------------------------------------------------------
@@ -504,28 +409,32 @@ pre,
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  padding: 5.5rem 6vw 2.5rem 6vw;
+  padding: 6.5rem 6vw 2.5rem 6vw;
   color: var(--hero-secondary, #f0f2d8);
-  z-index: 900;
+  z-index: 1100;
   pointer-events: none;
   visibility: hidden;
+  opacity: 0;
   overflow-y: auto;
   overflow-x: hidden;
+  transition: opacity 0.22s ease, visibility 0.22s ease;
 }
 
 .menu.is-menu-open {
   pointer-events: auto;
   visibility: visible;
+  opacity: 1;
 }
 
 .menu-bg {
   position: fixed;
   inset: 0;
-  background: rgba(7, 6, 7, 0.84);
+  background: rgba(7, 6, 7, 0.90);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
   z-index: -1;
   opacity: 0;
+  cursor: pointer;
 }
 
 .menu-container {
@@ -537,7 +446,7 @@ pre,
 .menu-items {
   display: flex;
   flex-direction: column;
-  gap: clamp(2px, 0.5vh, 6px);
+  gap: clamp(4px, 0.8vh, 10px);
 }
 
 .menu-item {
@@ -546,25 +455,39 @@ pre,
   font-size: clamp(1.4rem, 2.6vw, 2.75rem);
   letter-spacing: -0.01em;
   line-height: 1.15;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   white-space: nowrap;
   color: var(--hero-secondary, #f0f2d8);
   cursor: pointer;
   overflow: hidden;
-  transition: color 0.2s ease, transform 0.2s ease;
-  width: fit-content;
+  transition: color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+  width: 100%;
+  max-width: 680px;
+  padding: 0.5rem 0.85rem;
+  border-radius: 8px;
+  user-select: none;
 }
 
 .menu-item:hover {
   color: var(--color-ember, #fc5000);
-  transform: translateX(8px);
+  background: rgba(252, 80, 0, 0.08);
+  transform: translateX(10px);
+}
+
+.menu-item:active {
+  transform: translateX(6px) scale(0.99);
 }
 
 .menu-item.sans {
   font-family: var(--font-body);
   font-weight: 600;
   letter-spacing: -0.02em;
+}
+
+/* Ensure all child text, masks, and dividers pass pointer events directly to the parent <a> link */
+.menu-item * {
+  pointer-events: none;
 }
 
 .item-index {
@@ -655,6 +578,7 @@ pre,
   pointer-events: none;
   background-color: var(--hero-primary, #070607);
   overflow: hidden;
+  perspective: 1200px;
 }
 
 .hero_media::after {
@@ -680,6 +604,8 @@ pre,
   pointer-events: none;
   opacity: 0.95;
   transition: opacity 0.6s ease;
+  will-change: transform;
+  transform-style: preserve-3d;
 }
 
 .cell {
