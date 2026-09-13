@@ -488,71 +488,52 @@ document.addEventListener('DOMContentLoaded', () => {
   const initObscuraMenu = () => {
     const menu = document.getElementById("obscura-menu");
     const menuBg = menu ? menu.querySelector(".menu-bg") : null;
-    const menuMeta = menu ? menu.querySelector(".menu-meta") : null;
+    const menuSubBar = menu ? menu.querySelector(".menu-sub-bar") : null;
     const menuItems = menu ? menu.querySelectorAll(".menu-item") : [];
     const follower = document.getElementById("menu-cursor-follower");
     const navToggler = document.getElementById("nav-toggler");
     const curvePath = document.getElementById("menu-curve-path");
 
-    // Preview Card Stage Elements
-    const previewStage = document.getElementById("menu-preview-stage");
-    const previewBadge = document.getElementById("preview-badge");
-    const previewMetric = document.getElementById("preview-metric");
-    const previewSub = document.getElementById("preview-sub");
-    const previewCard = document.getElementById("menu-preview-card");
-
     if (!menu || !navToggler) return;
 
-    // ── 1. FLUID MAGNETIC CURSOR & FLOATING PREVIEW CARD PHYSICS ──
+    // ── 1. SPLIT CHARACTERS FOR KINETIC MICRO-STAGGER ──
+    const itemCharMaps = [];
+    menuItems.forEach((item) => {
+      const title = item.querySelector(".item-title");
+      if (!title) return;
+
+      const text = title.textContent.trim();
+      title.innerHTML = "";
+      const chars = [];
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const span = document.createElement("span");
+        span.className = "k-char";
+        span.style.display = "inline-block";
+        span.style.willChange = "transform";
+        span.textContent = char === " " ? "\u00A0" : char;
+        title.appendChild(span);
+        chars.push(span);
+      }
+
+      itemCharMaps.push({ item, chars });
+    });
+
+    // ── 2. FLUID MAGNETIC SPOTLIGHT CURSOR ──
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
-    let prevMouseX = mouseX;
     let posX = mouseX;
     let posY = mouseY;
-
-    let cardX = mouseX;
-    let cardY = mouseY;
-    let currentTilt = 0;
-    let isHoveringLink = false;
     let cursorRaf = null;
 
-    const renderCursorAndPreview = () => {
-      // 1. Follower Lerp
-      posX += (mouseX - posX) * 0.18;
-      posY += (mouseY - posY) * 0.18;
+    const renderCursor = () => {
+      posX += (mouseX - posX) * 0.2;
+      posY += (mouseY - posY) * 0.2;
       if (follower) {
         follower.style.transform = `translate3d(${posX}px, ${posY}px, 0) translate(-50%, -50%)`;
       }
-
-      // 2. Preview Card Floating Physics (Spring + Velocity Tilt)
-      if (previewStage && previewCard && isHoveringLink) {
-        let targetCardX = mouseX + 160;
-        let targetCardY = mouseY - 50;
-
-        // Viewport clamping
-        const cardWidth = 300;
-        const cardHeight = 130;
-        if (targetCardX + cardWidth / 2 > window.innerWidth - 20) {
-          targetCardX = mouseX - 160;
-        }
-        if (targetCardY - cardHeight / 2 < 20) {
-          targetCardY = mouseY + 60;
-        }
-
-        cardX += (targetCardX - cardX) * 0.12;
-        cardY += (targetCardY - cardY) * 0.12;
-
-        const velocityX = mouseX - prevMouseX;
-        prevMouseX = mouseX;
-
-        const targetTilt = Math.max(-14, Math.min(14, velocityX * 0.75));
-        currentTilt += (targetTilt - currentTilt) * 0.14;
-
-        previewStage.style.transform = `translate3d(${cardX}px, ${cardY}px, 0) translate(-50%, -50%)`;
-        previewCard.style.transform = `rotate(${currentTilt.toFixed(2)}deg)`;
-      }
-
-      cursorRaf = requestAnimationFrame(renderCursorAndPreview);
+      cursorRaf = requestAnimationFrame(renderCursor);
     };
 
     window.addEventListener("mousemove", (e) => {
@@ -560,31 +541,40 @@ document.addEventListener('DOMContentLoaded', () => {
       mouseY = e.clientY;
     });
 
-    // ── 2. PREVIEW CARD HOVER BINDINGS ──
-    menuItems.forEach((item) => {
+    // ── 3. HOVER WAVE MOTION ON SPLIT CHARS ──
+    itemCharMaps.forEach(({ item, chars }) => {
       item.addEventListener("mouseenter", () => {
-        isHoveringLink = true;
-
-        const badge = item.getAttribute("data-badge");
-        const metric = item.getAttribute("data-metric");
-        const sub = item.getAttribute("data-sub");
-
-        if (previewBadge && badge) previewBadge.textContent = badge;
-        if (previewMetric && metric) previewMetric.textContent = metric;
-        if (previewSub && sub) previewSub.textContent = sub;
-
-        if (previewStage) previewStage.classList.add("is-visible");
         if (follower) follower.classList.add("is-hovering");
+        if (typeof gsap !== "undefined") {
+          gsap.killTweensOf(chars);
+          gsap.to(chars, {
+            y: -5,
+            color: "#ffffff",
+            duration: 0.32,
+            stagger: 0.015,
+            ease: "power2.out",
+            overwrite: true,
+          });
+        }
       });
 
       item.addEventListener("mouseleave", () => {
-        isHoveringLink = false;
-        if (previewStage) previewStage.classList.remove("is-visible");
         if (follower) follower.classList.remove("is-hovering");
+        if (typeof gsap !== "undefined") {
+          gsap.killTweensOf(chars);
+          gsap.to(chars, {
+            y: 0,
+            color: "#f5f5f7",
+            duration: 0.28,
+            stagger: 0.01,
+            ease: "power2.out",
+            overwrite: true,
+          });
+        }
       });
     });
 
-    // ── 3. SVG CURVED MORPHING TIMELINE (Awwwards Fluid Curve) ──
+    // ── 4. SVG CURVED MORPHING CURTAIN GSAP TIMELINE ──
     let tl = null;
     const curveProgress = { y: 0, bulge: 0 };
 
@@ -592,7 +582,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!curvePath) return;
       const y = curveProgress.y;
       const b = curveProgress.bulge;
-      // Quadratic Bézier curve from (0, y) through control point (50, y + b) to (100, y)
       curvePath.setAttribute("d", `M 0 0 L 100 0 L 100 ${y} Q 50 ${y + b} 0 ${y} Z`);
     };
 
@@ -610,7 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
       });
 
-      // Step A: SVG Curved Curtain Reveal
+      // Step A: Morphing SVG Drop
       tl.fromTo(
         curveProgress,
         { y: 0, bulge: 0 },
@@ -633,46 +622,35 @@ document.addEventListener('DOMContentLoaded', () => {
         0.52
       );
 
-      // Step B: Backdrop Fade & Blur
+      // Step B: Backdrop Glass Fade
       tl.to(menuBg, { opacity: 1, duration: 0.5 }, 0.2);
 
-      // Step C: Meta Top Header Entrance
-      if (menuMeta) {
+      // Step C: Sub-bar slide down
+      if (menuSubBar) {
         tl.fromTo(
-          menuMeta,
-          { opacity: 0, y: -20 },
-          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
-          0.35
+          menuSubBar,
+          { opacity: 0, y: -14 },
+          { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" },
+          0.32
         );
       }
 
-      // Step D: Staggered Menu Item Rows Entrance
+      // Step D: Staggered entrance for big items
       tl.fromTo(
         menuItems,
-        { opacity: 0, y: 36 },
+        { opacity: 0, y: 38 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.7,
+          duration: 0.72,
           stagger: 0.05,
           ease: "power4.out",
         },
-        0.38
+        0.36
       );
-
-      // Step E: Arrow Pill Spin-in
-      const arrows = menu.querySelectorAll(".item-arrow");
-      if (arrows.length) {
-        tl.fromTo(
-          arrows,
-          { scale: 0, rotation: -90 },
-          { scale: 1, rotation: 0, duration: 0.5, stagger: 0.05, ease: "back.out(1.7)" },
-          0.45
-        );
-      }
     };
 
-    // ── 4. MAGNETIC TOGGLER BUTTON ──
+    // ── 5. MAGNETIC BUTTON PHYSICS ──
     let btnBounds = null;
     const handleNavMagnetic = (e) => {
       if (window.matchMedia("(pointer: coarse)").matches) return;
@@ -696,7 +674,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btnBounds = null;
     });
 
-    // ── 5. BUTTON CHARACTER FLICKER ──
+    // ── 6. BUTTON CHARACTER FLICKER ──
     function flickerTextTo(element, text) {
       if (!element) return;
       if (typeof gsap === "undefined") {
@@ -726,7 +704,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
     }
 
-    // ── 6. STATE TOGGLE ──
+    // ── 7. TOGGLE STATE MANAGEMENT ──
     let isMenuOpen = false;
 
     const openMenu = () => {
@@ -741,15 +719,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!cursorRaf) {
         posX = mouseX;
         posY = mouseY;
-        cardX = mouseX;
-        cardY = mouseY;
-        prevMouseX = mouseX;
-        renderCursorAndPreview();
+        renderCursor();
       }
 
-      if (tl) {
-        tl.timeScale(1).play();
-      }
+      if (tl) tl.timeScale(1).play();
       flickerTextTo(navToggler, "Close");
     };
 
@@ -758,7 +731,6 @@ document.addEventListener('DOMContentLoaded', () => {
       isMenuOpen = false;
       menu.setAttribute("aria-hidden", "true");
       document.body.classList.remove("is-menu-open");
-
       if (window.lenis) window.lenis.start();
 
       if (fast || !tl) {
@@ -787,19 +759,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     navToggler.addEventListener("click", toggleMenu);
 
-    // Auto close and smooth scroll when any menu link is clicked
+    // ── 8. LINK CLICK HANDLING & NAVIGATION ──
     menuItems.forEach((item) => {
       item.addEventListener("click", (e) => {
-        e.preventDefault();
         const href = item.getAttribute("href");
+        if (!href || href.startsWith("http")) return;
+
+        e.preventDefault();
         closeMenu(false);
+
         setTimeout(() => {
           navigateToSection(href);
         }, 320);
       });
     });
 
-    // Close when clicking on backdrop or outside menu container
+    // Close on backdrop click
     if (menuBg) {
       menuBg.addEventListener("click", () => {
         if (isMenuOpen) closeMenu(false);
@@ -811,14 +786,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Escape key to close
+    // Close on Escape key
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && isMenuOpen) {
         closeMenu(false);
       }
     });
 
-    // Initialize animation setup once fonts are ready
+    // Ready Hook
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(setupMenuAnimation);
     } else {
