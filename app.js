@@ -276,138 +276,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let riveInstance = null;
     let isRiveLoaded = false;
-    let targetX = 0.5;
-    let targetY = 0.5;
-    let currentX = 0.5;
-    let currentY = 0.5;
-    let trackingAnimFrame = null;
-    let lastPointerTime = Date.now();
-    let isHeroInView = true;
-
-    // ── INTERACTIVE FACE-TRACKING & EYE-TRACKING PHYSICS LOOP ──
-    const startFaceTracking = () => {
-      const updateTracking = () => {
-        if (!isRiveLoaded || !riveInstance) {
-          trackingAnimFrame = requestAnimationFrame(updateTracking);
-          return;
-        }
-
-        // Only compute when hero is visible in the viewport (performance safeguard)
-        if (isHeroInView) {
-          const now = Date.now();
-          const idleTime = now - lastPointerTime;
-
-          // Natural idle ambient micro-saccades & breathing glance
-          if (idleTime > 2800) {
-            const timeSec = now * 0.001;
-            // Gentle organic micro-drift around center
-            const ambientDriftX = Math.sin(timeSec * 0.8) * 0.045 + Math.sin(timeSec * 2.1) * 0.015;
-            const ambientDriftY = Math.cos(timeSec * 0.6) * 0.035 + Math.cos(timeSec * 1.7) * 0.012;
-            targetX = 0.5 + ambientDriftX;
-            targetY = 0.5 + ambientDriftY;
-          }
-
-          // Silky smooth spring/damping interpolation (factor = 0.088)
-          currentX += (targetX - currentX) * 0.088;
-          currentY += (targetY - currentY) * 0.088;
-
-          const clampedX = Math.max(0.001, Math.min(0.999, currentX));
-          const clampedY = Math.max(0.001, Math.min(0.999, currentY));
-
-          // Scrub Rive character eyes and head orientation
-          riveInstance.scrub('character-x', clampedX);
-          riveInstance.scrub('character-y', clampedY);
-
-          // 3D Parallax Perspective Depth on the Canvas
-          if (riveCanvas) {
-            const shiftX = (clampedX - 0.5) * 22; // translation px
-            const shiftY = (clampedY - 0.5) * 14; // translation px
-            const rotY = (clampedX - 0.5) * 5.2;  // tilt degrees
-            const rotX = -(clampedY - 0.5) * 4.0; // tilt degrees
-            riveCanvas.style.transform = `translate3d(${shiftX.toFixed(2)}px, ${shiftY.toFixed(2)}px, 0) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) scale(1.02)`;
-          }
-        }
-
-        trackingAnimFrame = requestAnimationFrame(updateTracking);
-      };
-
-      if (!trackingAnimFrame) {
-        trackingAnimFrame = requestAnimationFrame(updateTracking);
-      }
-    };
-
-    // Calculate normalized pointer coordinates with organic non-linear falloff
-    const handlePointerCoords = (clientX, clientY) => {
-      lastPointerTime = Date.now();
-      const rect = hero.getBoundingClientRect();
-
-      // Head center anchor point (horizontally centered, slightly above vertical midpoint)
-      const headCenterX = rect.left + rect.width * 0.5;
-      const headCenterY = rect.top + rect.height * 0.46;
-
-      const deltaX = clientX - headCenterX;
-      const deltaY = clientY - headCenterY;
-
-      // Soft non-linear hyperbolic tangent curve: direct linear response near center, smooth tapering at edges
-      const spreadX = Math.max(300, rect.width * 0.48);
-      const spreadY = Math.max(240, rect.height * 0.45);
-
-      const normX = Math.tanh(deltaX / spreadX); // [-1.0, 1.0]
-      const normY = Math.tanh(deltaY / spreadY); // [-1.0, 1.0]
-
-      // Map from [-1.0, 1.0] to [0.0, 1.0] for Rive timeline
-      targetX = 0.5 + normX * 0.48;
-      targetY = 0.5 + normY * 0.48;
-    };
-
-    // Window pointermove listener
-    window.addEventListener('pointermove', (e) => {
-      handlePointerCoords(e.clientX, e.clientY);
-    }, { passive: true });
-
-    // Touchmove support for mobile & tablet devices
-    window.addEventListener('touchmove', (e) => {
-      if (e.touches && e.touches[0]) {
-        handlePointerCoords(e.touches[0].clientX, e.touches[0].clientY);
-      }
-    }, { passive: true });
-
-    // Center reset when pointer leaves window
-    document.addEventListener('mouseleave', () => {
-      targetX = 0.5;
-      targetY = 0.5;
-      lastPointerTime = 0;
-    });
-
-    // Reactive click / tap: Fox blinks inquisitively when user clicks the hero area
-    hero.addEventListener('pointerdown', () => {
-      if (isRiveLoaded && riveInstance) {
-        riveInstance.play('blink');
-      }
-    });
-
-    // Gyroscope / Device orientation fallback for mobile phones
-    if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission !== 'function') {
-      window.addEventListener('deviceorientation', (e) => {
-        if (e.gamma !== null && e.beta !== null) {
-          lastPointerTime = Date.now();
-          const tiltX = Math.max(-30, Math.min(30, e.gamma)) / 30;
-          const tiltY = Math.max(-25, Math.min(25, e.beta - 40)) / 25;
-          targetX = 0.5 + tiltX * 0.45;
-          targetY = 0.5 + tiltY * 0.45;
-        }
-      }, { passive: true });
-    }
-
-    // Viewport Visibility Observer (Saves CPU/GPU when hero is off-screen)
-    if ('IntersectionObserver' in window) {
-      const heroObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          isHeroInView = entry.isIntersecting;
-        });
-      }, { threshold: 0.05 });
-      heroObserver.observe(hero);
-    }
 
     // Load Rive interactive mascot animation from assets/mascot.riv
     if (typeof rive !== 'undefined' && riveCanvas) {
@@ -434,18 +302,8 @@ document.addEventListener('DOMContentLoaded', () => {
             riveCanvas.height = h * dpr;
             riveInstance.resizeDrawingSurfaceToCanvas();
 
-            // Play ambient animations continuously: idle breathing, tail wagging, eye blinking
+            // Play ambient animations only: idle breathing, tail wagging, eye blinking
             riveInstance.play(['idle', 'iddle-tail', 'blink']);
-
-            // Explicitly pause tracking axes so Rive internal clock doesn't auto-advance them
-            riveInstance.pause(['character-x', 'character-y']);
-
-            // Initialize eyes at center (0.5, 0.5)
-            riveInstance.scrub('character-x', 0.5);
-            riveInstance.scrub('character-y', 0.5);
-
-            // Start smooth lerp tracking loop
-            startFaceTracking();
           },
         });
 
@@ -724,13 +582,13 @@ document.addEventListener('DOMContentLoaded', () => {
       // Master Animation Timeline Configuration (Dual-Velocity State Machine)
       tl = (typeof gsap !== "undefined")
         ? gsap.timeline({
-            paused: true,
-            defaults: { ease: "power3.out" },
-            onReverseComplete: () => {
-              menu.classList.remove("is-menu-open");
-              menu.style.pointerEvents = "";
-            },
-          })
+          paused: true,
+          defaults: { ease: "power3.out" },
+          onReverseComplete: () => {
+            menu.classList.remove("is-menu-open");
+            menu.style.pointerEvents = "";
+          },
+        })
         : null;
 
       if (tl) {
