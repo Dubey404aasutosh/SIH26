@@ -79,7 +79,7 @@ Drop this markup into your `<body>`:
     <path id="menu-curve-path" d="M 0 0 L 100 0 L 100 0 Q 50 0 0 0 Z" fill="rgba(9, 10, 15, 0.82)"></path>
   </svg>
 
-  <!-- Frosted Glass Dark Backdrop -->
+  <!-- Frosted Glass Dark Backdrop with Spotlight -->
   <div class="menu-bg"></div>
 
   <!-- Luminous Fluid Cursor Follower -->
@@ -87,47 +87,90 @@ Drop this markup into your `<body>`:
 
   <!-- Central Centered Content Container -->
   <div class="menu-container">
-    <!-- Subheader Bar: Index & Total Count -->
-    <div class="menu-sub-bar">
-      <span class="menu-sub-label">INDEX</span>
-      <span class="menu-sub-label">07 DESTINATIONS</span>
-    </div>
-
     <!-- Main Typographic Navigation List -->
     <div class="menu-items">
-      <a class="menu-item" href="#hero">
-        <span class="item-title">The Thesis</span>
-        <span class="item-index">01</span>
+      <a class="menu-item" href="#hero" data-key="1">
+        <div class="item-left">
+          <span class="item-key-badge">1</span>
+          <span class="item-title">The Thesis</span>
+          <span class="item-category-pill">MANIFESTO <span class="pill-arrow">↗</span></span>
+        </div>
+        <div class="item-right">
+          <span class="item-stat-preview">850ms • ZERO-LEAK</span>
+          <span class="item-index">01</span>
+        </div>
       </a>
 
-      <a class="menu-item" href="#problem">
-        <span class="item-title">The Trilemma</span>
-        <span class="item-index">02</span>
+      <a class="menu-item" href="#problem" data-key="2">
+        <div class="item-left">
+          <span class="item-key-badge">2</span>
+          <span class="item-title">The Trilemma</span>
+          <span class="item-category-pill">THREAT MODEL <span class="pill-arrow">↗</span></span>
+        </div>
+        <div class="item-right">
+          <span class="item-stat-preview">CRISIS MATRIX</span>
+          <span class="item-index">02</span>
+        </div>
       </a>
 
-      <a class="menu-item" href="#architecture">
-        <span class="item-title">Six Pillars</span>
-        <span class="item-index">03</span>
+      <a class="menu-item" href="#architecture" data-key="3">
+        <div class="item-left">
+          <span class="item-key-badge">3</span>
+          <span class="item-title">Six Pillars</span>
+          <span class="item-category-pill">6 PILLARS <span class="pill-arrow">↗</span></span>
+        </div>
+        <div class="item-right">
+          <span class="item-stat-preview">CORE FOUNDATION</span>
+          <span class="item-index">03</span>
+        </div>
       </a>
 
-      <a class="menu-item" href="#diff-section">
-        <span class="item-title">What the Server Saw</span>
-        <span class="item-index">04</span>
+      <a class="menu-item" href="#diff-section" data-key="4">
+        <div class="item-left">
+          <span class="item-key-badge">4</span>
+          <span class="item-title">What the Server Saw</span>
+          <span class="item-category-pill">FORENSIC DIFF <span class="pill-arrow">↗</span></span>
+        </div>
+        <div class="item-right">
+          <span class="item-stat-preview">LIVE SPLIT VIEW</span>
+          <span class="item-index">04</span>
+        </div>
       </a>
 
-      <a class="menu-item" href="#egress-guard">
-        <span class="item-title">Egress Guard</span>
-        <span class="item-index">05</span>
+      <a class="menu-item" href="#egress-guard" data-key="5">
+        <div class="item-left">
+          <span class="item-key-badge">5</span>
+          <span class="item-title">Egress Guard</span>
+          <span class="item-category-pill">KERNEL SHIELD <span class="pill-arrow">↗</span></span>
+        </div>
+        <div class="item-right">
+          <span class="item-stat-preview">eBPF PACKET GATE</span>
+          <span class="item-index">05</span>
+        </div>
       </a>
 
-      <a class="menu-item" href="#benchmarks">
-        <span class="item-title">Benchmarks</span>
-        <span class="item-index">06</span>
+      <a class="menu-item" href="#benchmarks" data-key="6">
+        <div class="item-left">
+          <span class="item-key-badge">6</span>
+          <span class="item-title">Benchmarks</span>
+          <span class="item-category-pill">PERFORMANCE <span class="pill-arrow">↗</span></span>
+        </div>
+        <div class="item-right">
+          <span class="item-stat-preview">500 WORKFLOWS</span>
+          <span class="item-index">06</span>
+        </div>
       </a>
 
-      <a class="menu-item" href="#qa">
-        <span class="item-title">Judge Q&amp;A</span>
-        <span class="item-index">07</span>
+      <a class="menu-item" href="#qa" data-key="7">
+        <div class="item-left">
+          <span class="item-key-badge">7</span>
+          <span class="item-title">Judge Q&amp;A</span>
+          <span class="item-category-pill">DEFENSE MATRIX <span class="pill-arrow">↗</span></span>
+        </div>
+        <div class="item-right">
+          <span class="item-stat-preview">CROSS-EXAMINATION</span>
+          <span class="item-index">07</span>
+        </div>
       </a>
     </div>
   </div>

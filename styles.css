@@ -469,11 +469,11 @@ body.is-menu-open > div:not(#obscura-menu):not(.nav-toggler) {
   fill: rgba(9, 10, 15, 0.40);
 }
 
-/* Frosted Glass Backdrop Layer */
+/* Frosted Glass Backdrop Layer with Ambient Mouse Spotlight */
 .menu-bg {
   position: fixed;
   inset: 0;
-  background: rgba(9, 10, 15, 0.52);
+  background: radial-gradient(650px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 77, 10, 0.16), transparent 70%), rgba(9, 10, 15, 0.52);
   backdrop-filter: blur(20px) saturate(150%);
   -webkit-backdrop-filter: blur(20px) saturate(150%);
   z-index: -2;
@@ -482,35 +482,7 @@ body.is-menu-open > div:not(#obscura-menu):not(.nav-toggler) {
   transition: opacity 0.5s ease;
 }
 
-/* ── 4. LUMINOUS CURSOR FOLLOWER ── */
-.menu-cursor-follower {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 14px;
-  height: 14px;
-  background-color: var(--color-ember, #ff4d0a);
-  box-shadow: 0 0 16px rgba(255, 77, 10, 0.8);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 1250;
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0);
-  transition: opacity 0.25s ease, width 0.25s ease, height 0.25s ease, background-color 0.2s ease;
-  will-change: transform, opacity;
-}
-
-.menu.is-menu-open .menu-cursor-follower.is-hovering {
-  opacity: 1;
-  width: 44px;
-  height: 44px;
-  background-color: rgba(255, 77, 10, 0.22);
-  border: 1.5px solid var(--color-ember, #ff4d0a);
-  box-shadow: 0 0 28px rgba(255, 77, 10, 0.5);
-  transform: translate(-50%, -50%) scale(1);
-}
-
-/* ── 5. CENTERED CONTENT CONTAINER ── */
+/* ── 4. CENTERED CONTENT CONTAINER ── */
 .menu-container {
   width: 100%;
   max-width: 1360px;
@@ -519,21 +491,7 @@ body.is-menu-open > div:not(#obscura-menu):not(.nav-toggler) {
   justify-content: center;
   margin: auto auto;
   z-index: 1;
-}
-
-.menu-sub-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding-bottom: clamp(0.4rem, 0.8vh, 0.75rem);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.22em;
-  color: rgba(255, 255, 255, 0.35);
-  font-weight: 600;
-  text-transform: uppercase;
+  position: relative;
 }
 
 /* ── 6. BIG TYPOGRAPHIC DESTINATION ITEMS ── */
@@ -551,14 +509,93 @@ body.is-menu-open > div:not(#obscura-menu):not(.nav-toggler) {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: clamp(0.35rem, 0.8vh, 0.75rem) 0;
+  padding: clamp(0.38rem, 0.85vh, 0.75rem) 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   user-select: none;
   position: relative;
   cursor: pointer;
-  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.65rem, 1.2vw, 1.2rem);
+}
+
+.item-key-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 0.15rem 0.45rem;
+  line-height: 1;
+  transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.menu-item:hover .item-key-badge {
+  color: #ff4d0a;
+  border-color: rgba(255, 77, 10, 0.6);
+  background: rgba(255, 77, 10, 0.1);
+}
+
+.item-category-pill {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: #ff4d0a;
+  background: rgba(255, 77, 10, 0.12);
+  border: 1px solid rgba(255, 77, 10, 0.32);
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  opacity: 0;
+  transform: translateX(-12px);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  pointer-events: none;
+}
+
+.pill-arrow {
+  font-size: 0.7rem;
+  transition: transform 0.3s ease;
+}
+
+.menu-item:hover .item-category-pill {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.menu-item:hover .pill-arrow {
+  transform: translate(2px, -2px);
+}
+
+.item-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 1.8vw, 2.2rem);
+}
+
+.item-stat-preview {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 500;
+  opacity: 0.6;
+  transition: opacity 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+.menu-item:hover .item-stat-preview {
+  opacity: 1;
+  color: #ffffff;
+  transform: translateX(-6px);
 }
 
 /* Full-Width Gradient Underline on Hover */
@@ -598,7 +635,7 @@ body.is-menu-open > div:not(#obscura-menu):not(.nav-toggler) {
 .menu-item:hover .item-title {
   color: #ffffff;
   transform: translateX(14px);
-  text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.4), 0 0 15px rgba(255, 77, 10, 0.3);
 }
 
 .item-index {
@@ -616,15 +653,17 @@ body.is-menu-open > div:not(#obscura-menu):not(.nav-toggler) {
   transform: translateX(-4px);
 }
 
-/* Sibling Dimming on Menu List Hover */
+/* Cinematic Depth-of-field Focus Mode on Menu List Hover */
 .menu-items:hover .menu-item {
-  opacity: 0.25;
-  filter: blur(0.4px);
+  opacity: 0.18;
+  filter: blur(2px);
+  transform: scale(0.985);
 }
 
 .menu-items .menu-item:hover {
   opacity: 1;
   filter: blur(0);
+  transform: scale(1);
 }
 
 /* ── 7. RESPONSIVE MOBILE ADAPTATION ── */
@@ -635,6 +674,11 @@ body.is-menu-open > div:not(#obscura-menu):not(.nav-toggler) {
 
   .item-title {
     font-size: clamp(1.8rem, 5.5vw, 2.6rem);
+  }
+
+  .item-stat-preview,
+  .item-key-badge {
+    display: none !important;
   }
 }
 

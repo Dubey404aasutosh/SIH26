@@ -520,7 +520,7 @@ document.addEventListener('DOMContentLoaded', () => {
       itemCharMaps.push({ item, chars });
     });
 
-    // ── 2. FLUID MAGNETIC SPOTLIGHT CURSOR ──
+    // ── 2. FLUID MAGNETIC SPOTLIGHT CURSOR & AMBIENT GLASS SPOTLIGHT ──
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
     let posX = mouseX;
@@ -539,9 +539,13 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener("mousemove", (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+      if (isMenuOpen && menuBg) {
+        menuBg.style.setProperty("--mouse-x", `${mouseX}px`);
+        menuBg.style.setProperty("--mouse-y", `${mouseY}px`);
+      }
     });
 
-    // ── 3. HOVER WAVE MOTION ON SPLIT CHARS ──
+    // ── 3. HOVER WAVE MOTION ON SPLIT CHARACTERS ──
     itemCharMaps.forEach(({ item, chars }) => {
       item.addEventListener("mouseenter", () => {
         if (follower) follower.classList.add("is-hovering");
@@ -625,17 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Step B: Backdrop Glass Fade
       tl.to(menuBg, { opacity: 1, duration: 0.5 }, 0.2);
 
-      // Step C: Sub-bar slide down
-      if (menuSubBar) {
-        tl.fromTo(
-          menuSubBar,
-          { opacity: 0, y: -14 },
-          { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" },
-          0.32
-        );
-      }
-
-      // Step D: Staggered entrance for big items
+      // Step C: Staggered entrance for big items
       tl.fromTo(
         menuItems,
         { opacity: 0, y: 38 },
@@ -786,10 +780,26 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Close on Escape key
+    // ── 9. KEYBOARD DIRECT JUMP & ESCAPE ──
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && isMenuOpen) {
+      if (!isMenuOpen) return;
+      if (e.key === "Escape") {
         closeMenu(false);
+        return;
+      }
+
+      // Keys 1 to 7 direct jump
+      const num = parseInt(e.key, 10);
+      if (num >= 1 && num <= 7) {
+        const targetItem = menu.querySelector(`.menu-item[data-key="${num}"]`);
+        if (targetItem) {
+          e.preventDefault();
+          const href = targetItem.getAttribute("href");
+          closeMenu(false);
+          setTimeout(() => {
+            if (href) navigateToSection(href);
+          }, 320);
+        }
       }
     });
 
