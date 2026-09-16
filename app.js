@@ -1310,12 +1310,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initTopParallaxEngine();
 
   /* ==========================================================================
-     MONUMENTAL FOOTER: 3D MAGNETIC PHYSICS & WEB AUDIO SYNTHESIZER
+     MONUMENTAL FOOTER: ULTRA-SMOOTH 60FPS 3D PHYSICS & WEB AUDIO SYNTHESIZER
      ========================================================================== */
   function initMonumentalFooterPhysics() {
     const shapes = document.querySelectorAll('.footer-shape');
-    const shapesRow = document.querySelector('.footer-shapes-row');
-    if (!shapes.length || !shapesRow) return;
+    if (!shapes.length) return;
 
     // 1. Web Audio API Pentatonic Harmonizer (C5, D5, E5, G5, A5)
     let audioCtx = null;
@@ -1336,61 +1335,84 @@ document.addEventListener('DOMContentLoaded', () => {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
 
-        // Alternating Sine & Triangle oscillator for warm organic chime tone
+        // Warm sine/triangle harmonics
         osc.type = noteIndex % 2 === 0 ? 'sine' : 'triangle';
         osc.frequency.setValueAtTime(PENTATONIC_FREQUENCIES[noteIndex % PENTATONIC_FREQUENCIES.length], now);
 
-        // Bell-like exponential decay envelope
         gain.gain.setValueAtTime(0.001, now);
-        gain.gain.exponentialRampToValueAtTime(0.09, now + 0.015);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
+        gain.gain.exponentialRampToValueAtTime(0.08, now + 0.012);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
 
         osc.connect(gain);
         gain.connect(audioCtx.destination);
 
         osc.start(now);
-        osc.stop(now + 0.40);
+        osc.stop(now + 0.34);
       } catch (err) {
-        // Graceful silence if browser blocks audio without prior gesture
+        // Audio unavailable or blocked
       }
     }
 
-    // 2. 3D Cursor Magnetic Tilt & Squish Bounce
+    // 2. High-Performance 60FPS Lerped Tilt on requestAnimationFrame
     shapes.forEach((shape, idx) => {
-      // 3D Tilt on Mouse Move
+      let rect = null;
+      let targetRotX = 0;
+      let targetRotY = 0;
+      let currentRotX = 0;
+      let currentRotY = 0;
+      let isHovered = false;
+      let animFrameId = null;
+
+      function updateTilt() {
+        if (!isHovered) {
+          currentRotX += (0 - currentRotX) * 0.15;
+          currentRotY += (0 - currentRotY) * 0.15;
+          if (Math.abs(currentRotX) < 0.05 && Math.abs(currentRotY) < 0.05) {
+            shape.style.transform = '';
+            animFrameId = null;
+            return;
+          }
+        } else {
+          currentRotX += (targetRotX - currentRotX) * 0.18;
+          currentRotY += (targetRotY - currentRotY) * 0.18;
+        }
+
+        shape.style.transform = `perspective(800px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg) translateZ(${isHovered ? 14 : 0}px)`;
+        animFrameId = requestAnimationFrame(updateTilt);
+      }
+
+      shape.addEventListener('mouseenter', () => {
+        rect = shape.getBoundingClientRect();
+        isHovered = true;
+        if (!animFrameId) {
+          animFrameId = requestAnimationFrame(updateTilt);
+        }
+      });
+
       shape.addEventListener('mousemove', (e) => {
-        const rect = shape.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const deltaX = (e.clientX - centerX) / (rect.width / 2);
-        const deltaY = (e.clientY - centerY) / (rect.height / 2);
+        if (!rect) rect = shape.getBoundingClientRect();
+        const normX = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+        const normY = (e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
 
-        const rotateX = (-deltaY * 16).toFixed(2);
-        const rotateY = (deltaX * 16).toFixed(2);
-
-        shape.style.transform = `perspective(850px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(24px) scale(1.08)`;
+        targetRotX = -normY * 12;
+        targetRotY = normX * 12;
       });
 
       shape.addEventListener('mouseleave', () => {
-        shape.style.transform = '';
+        isHovered = false;
+        rect = null;
       });
 
-      // Squish Animation & Audio Trigger
       function triggerAction() {
         const note = parseInt(shape.dataset.note, 10);
         playShapeChime(isNaN(note) ? idx : note);
-        shape.style.transform = 'perspective(850px) scale(0.92, 1.14) translateZ(10px)';
+        shape.style.transform = 'perspective(800px) scale(0.95) translateZ(4px)';
         setTimeout(() => {
-          shape.style.transform = 'perspective(850px) scale(1.06, 0.94) translateZ(20px)';
-          setTimeout(() => {
-            shape.style.transform = '';
-          }, 180);
-        }, 120);
+          shape.style.transform = '';
+        }, 180);
       }
 
-      shape.addEventListener('mousedown', triggerAction);
-
-      // Full Keyboard Accessibility (Enter / Space triggers action)
+      shape.addEventListener('click', triggerAction);
       shape.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
