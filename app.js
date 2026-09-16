@@ -1308,5 +1308,98 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   initTopParallaxEngine();
+
+  /* ==========================================================================
+     MONUMENTAL FOOTER: 3D MAGNETIC PHYSICS & WEB AUDIO SYNTHESIZER
+     ========================================================================== */
+  function initMonumentalFooterPhysics() {
+    const shapes = document.querySelectorAll('.footer-shape');
+    const shapesRow = document.querySelector('.footer-shapes-row');
+    if (!shapes.length || !shapesRow) return;
+
+    // 1. Web Audio API Pentatonic Harmonizer (C5, D5, E5, G5, A5)
+    let audioCtx = null;
+    const PENTATONIC_FREQUENCIES = [523.25, 587.33, 659.25, 783.99, 880.00];
+
+    function playShapeChime(noteIndex) {
+      try {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) audioCtx = new AudioContextClass();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        if (!audioCtx) return;
+
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        // Alternating Sine & Triangle oscillator for warm organic chime tone
+        osc.type = noteIndex % 2 === 0 ? 'sine' : 'triangle';
+        osc.frequency.setValueAtTime(PENTATONIC_FREQUENCIES[noteIndex % PENTATONIC_FREQUENCIES.length], now);
+
+        // Bell-like exponential decay envelope
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.exponentialRampToValueAtTime(0.09, now + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.40);
+      } catch (err) {
+        // Graceful silence if browser blocks audio without prior gesture
+      }
+    }
+
+    // 2. 3D Cursor Magnetic Tilt & Squish Bounce
+    shapes.forEach((shape, idx) => {
+      // 3D Tilt on Mouse Move
+      shape.addEventListener('mousemove', (e) => {
+        const rect = shape.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const deltaX = (e.clientX - centerX) / (rect.width / 2);
+        const deltaY = (e.clientY - centerY) / (rect.height / 2);
+
+        const rotateX = (-deltaY * 16).toFixed(2);
+        const rotateY = (deltaX * 16).toFixed(2);
+
+        shape.style.transform = `perspective(850px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(24px) scale(1.08)`;
+      });
+
+      shape.addEventListener('mouseleave', () => {
+        shape.style.transform = '';
+      });
+
+      // Squish Animation & Audio Trigger
+      function triggerAction() {
+        const note = parseInt(shape.dataset.note, 10);
+        playShapeChime(isNaN(note) ? idx : note);
+        shape.style.transform = 'perspective(850px) scale(0.92, 1.14) translateZ(10px)';
+        setTimeout(() => {
+          shape.style.transform = 'perspective(850px) scale(1.06, 0.94) translateZ(20px)';
+          setTimeout(() => {
+            shape.style.transform = '';
+          }, 180);
+        }, 120);
+      }
+
+      shape.addEventListener('mousedown', triggerAction);
+
+      // Full Keyboard Accessibility (Enter / Space triggers action)
+      shape.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          triggerAction();
+        }
+      });
+    });
+  }
+
+  initMonumentalFooterPhysics();
 });
 
