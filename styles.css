@@ -115,7 +115,9 @@ body {
   min-height: 100vh;
   background-color: var(--cream-paper);
   color: var(--charcoal);
-  overflow-x: hidden;
+  /* `clip` not `hidden`: `hidden` turns <body> into a scroll container, which
+     silently breaks `position: sticky` for every descendant. */
+  overflow-x: clip;
 }
 
 a {
@@ -790,7 +792,8 @@ body.is-menu-open>div:not(#obscura-menu):not(.nav-toggler) {
   box-sizing: border-box;
 }
 
-.hero_row_text h1 {
+.hero_row_text h1,
+.hero_row_text .hero_row_title {
   font-family: var(--font-sans) !important;
   font-size: clamp(1.6rem, 6.5vw, 11vh);
   line-height: 1.08;
@@ -804,7 +807,8 @@ body.is-menu-open>div:not(#obscura-menu):not(.nav-toggler) {
   flex-shrink: 0;
 }
 
-.hero_row_text h4 {
+.hero_row_text h4,
+.hero_row_text .hero_row_sub {
   font-family: var(--font-sans) !important;
   font-size: clamp(11px, 1.1vw, 15px);
   line-height: 1;
@@ -820,12 +824,14 @@ body.is-menu-open>div:not(#obscura-menu):not(.nav-toggler) {
 }
 
 /* Specific proportional sizing for multi-word headline rows to prevent text truncation */
-.hero_row_kavach .hero_row_text h1 {
+.hero_row_kavach .hero_row_text h1,
+.hero_row_kavach .hero_row_text .hero_row_title {
   font-size: clamp(1.5rem, 5.5vw, 9.6vh);
   letter-spacing: -0.035em !important;
 }
 
-.hero_row_trust .hero_row_text h1 {
+.hero_row_trust .hero_row_text h1,
+.hero_row_trust .hero_row_text .hero_row_title {
   font-size: clamp(1.35rem, 4.8vw, 8.6vh);
   letter-spacing: -0.04em !important;
 }
@@ -912,11 +918,13 @@ body.is-menu-open>div:not(#obscura-menu):not(.nav-toggler) {
     padding: 0 16px;
   }
 
-  .hero_row_text h1 {
+  .hero_row_text h1,
+  .hero_row_text .hero_row_title {
     font-size: clamp(26px, 8.5vw, 44px);
   }
 
-  .hero_row_text h4 {
+  .hero_row_text h4,
+  .hero_row_text .hero_row_sub {
     font-size: 11px;
   }
 }
@@ -1505,64 +1513,178 @@ body.is-menu-open>div:not(#obscura-menu):not(.nav-toggler) {
 }
 
 .diff-toolbar {
-  background-color: var(--dark-panel, #070607);
-  border-bottom: var(--border);
-  padding: 14px 24px;
+  background: linear-gradient(180deg, #18171d 0%, #0d0c10 100%);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
+  padding: 12px 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+}
+
+.diff-tabs-wrapper {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 14px;
 }
 
-.diff-tabs {
+.diff-tabs-label-wrap {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.diff-tabs-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-ember, #FC5000);
+  box-shadow: 0 0 10px var(--color-ember, #FC5000);
+  animation: pulse-dot 1.8s infinite ease-in-out;
+}
+
+.diff-tabs-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.diff-tabs {
+  background: rgba(0, 0, 0, 0.55);
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  padding: 5px;
+  border-radius: var(--radius-pill, 9999px);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
   flex-wrap: wrap;
 }
 
 .diff-tab-btn {
   font-family: var(--font-body);
   font-size: 13px;
-  font-weight: 500;
-  color: #A09080;
+  font-weight: 600;
+  color: #E2E8F0;
   padding: 8px 16px;
-  border-radius: var(--radius-pill, 800px);
-  border: 1.5px solid transparent;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex;
+  border-radius: var(--radius-pill, 9999px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   cursor: pointer;
-  background: transparent;
+  user-select: none;
+  outline: none;
+  position: relative;
+  text-decoration: none;
 }
 
 .diff-tab-btn:hover {
   color: #FFFFFF;
-  background-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.32);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
-.diff-tab-btn.active {
-  color: var(--color-obsidian, #070607);
-  background-color: var(--color-sulfur, #f5f28e);
-  border-color: var(--color-obsidian, #070607);
+.diff-tab-btn:active {
+  transform: translateY(0px);
+}
+
+.diff-tab-btn svg {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+  stroke: currentColor;
+}
+
+.diff-tab-btn:hover svg {
+  transform: scale(1.1);
+}
+
+/* Micro Chips for Each Tab */
+.tab-chip {
+  font-family: var(--font-mono);
+  font-size: 10px;
   font-weight: 700;
-  box-shadow: 0 2px 10px rgba(245, 242, 142, 0.35);
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #CBD5E1;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.2s ease;
+  line-height: 1.2;
+}
+
+/* Active State Visuals: Radiant Glow */
+.diff-tab-btn.active {
+  color: #070607 !important;
+  background: var(--color-sulfur, #f5f28e) !important;
+  border-color: #070607 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 18px rgba(245, 242, 142, 0.45), 0 1px 3px rgba(0, 0, 0, 0.2) !important;
   transform: translateY(-1px);
 }
 
+.diff-tab-btn.active svg {
+  stroke: #070607 !important;
+}
+
+.diff-tab-btn.active .tab-chip {
+  background: rgba(7, 6, 7, 0.14) !important;
+  color: #070607 !important;
+  border-color: rgba(7, 6, 7, 0.25) !important;
+}
+
+/* Tab-Specific Active Personalities */
+.diff-tab-btn.active[data-view="ssg-json"] {
+  background: #67E8F9 !important;
+  box-shadow: 0 4px 18px rgba(103, 232, 249, 0.45), 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+.diff-tab-btn.active[data-view="ledger-entry"] {
+  background: #86EFAC !important;
+  box-shadow: 0 4px 18px rgba(134, 239, 172, 0.45), 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Right-Hand Wire Payload Stat Chip */
 .diff-stats-pill {
   font-family: var(--font-mono);
   font-size: 12px;
   color: #FFFFFF;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   background: rgba(255, 255, 255, 0.08);
-  padding: 6px 14px;
-  border-radius: var(--radius-pill, 800px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 7px 16px;
+  border-radius: var(--radius-pill, 9999px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  transition: border-color 0.25s ease;
+}
+
+.diff-stats-pill strong {
+  color: #FCD34D;
+}
+
+.diff-stats-pill code {
+  color: #67E8F9;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
 .indicator-dot-green {
@@ -2271,13 +2393,28 @@ body.is-menu-open>div:not(#obscura-menu):not(.nav-toggler) {
   display: flex;
   flex-direction: column;
   gap: 10em;
-  padding-bottom: 25vh;
   position: relative;
   z-index: 10;
 }
 
+/* The trailing space has to be a flex item, not padding on the flex container
+   and not a margin on the last card. Container padding sits outside the sticky
+   containing block, and an element's own margin shrinks its own sticky range -
+   either way the completed stack got no dwell before it released. */
+.cards::after {
+  content: "";
+  display: block;
+  flex: 0 0 auto;
+  height: 8vh;
+}
+
 .cards .card {
-  position: relative;
+  /* Native sticky stacking. Replaces six independent GSAP pins: the pins had to
+     re-measure on every refresh (resize / reload / font load) and measuring a
+     card while it was already pinned produced a negative start, which dropped
+     card 1 out of the stack and left it floating over the page. */
+  position: sticky;
+  top: 12vh;
   width: 100%;
   height: 60vh;
   min-height: 480px;
@@ -2482,10 +2619,20 @@ body.is-menu-open>div:not(#obscura-menu):not(.nav-toggler) {
     gap: 4em;
   }
 
-  .card {
+  /* Must match `.cards .card` specificity or the desktop fixed height wins and
+     the taller stacked-column layout below gets clipped by card-inner's
+     overflow:hidden. Sticky is dropped too: a card taller than the viewport
+     cannot settle, so the cards simply flow on small screens. */
+  .cards .card {
+    position: static;
+    top: auto;
     height: auto;
-    min-height: auto;
+    min-height: 0;
     max-height: none;
+  }
+
+  .cards::after {
+    height: 0;
   }
 
   .card-inner {
@@ -3569,4 +3716,4 @@ b {
   overflow: visible;
   filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.08));
 }
-
+

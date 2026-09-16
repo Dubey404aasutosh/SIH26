@@ -16,7 +16,7 @@
     href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Syne:wght@700;800&family=JetBrains+Mono:ital,wght@0,400..700;1,400..700&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css?v=6.8">
+  <link rel="stylesheet" href="styles.css?v=6.9">
 
   <!-- CSS stylesheet CDN libraries (Splitting.js Grid Cell Matrix ss-16) -->
   <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css" />
@@ -312,41 +312,33 @@
       <div class="hero_row">
         <div class="hero_row_text">
           <h1>PRAHARI</h1>
-          <h4>ZERO-LEAK PRIVACY</h4>
+          <p class="hero_row_sub">ZERO-LEAK PRIVACY</p>
         </div>
         <div class="hero_row_separator"></div>
       </div>
 
       <div class="hero_row hero_row_kavach">
         <div class="hero_row_text">
-          <h4>DUAL REALITY</h4>
-          <h1>KAVACH ENGINE</h1>
+          <p class="hero_row_sub">DUAL REALITY</p>
+          <p class="hero_row_title">KAVACH ENGINE</p>
         </div>
         <div class="hero_row_separator"></div>
       </div>
 
       <div class="hero_row">
         <div class="hero_row_text">
-          <h1>SETU SSG</h1>
-          <h4>6 KB WIRE PAYLOAD</h4>
+          <p class="hero_row_title">SETU SSG</p>
+          <p class="hero_row_sub">6 KB WIRE PAYLOAD</p>
         </div>
         <div class="hero_row_separator"></div>
       </div>
 
       <div class="hero_row hero_row_trust">
         <div class="hero_row_text">
-          <h4>DPDP 2023</h4>
-          <h1>VERIFIABLE TRUST</h1>
+          <p class="hero_row_sub">DPDP 2023</p>
+          <p class="hero_row_title">VERIFIABLE TRUST</p>
         </div>
       </div>
-    </div>
-
-    <!-- Floating Explore Prompt -->
-    <div class="hero_scroll_prompt" id="hero-scroll-prompt">
-      <a href="#hero-showcase" class="hero_scroll_link" aria-label="Scroll to architecture showcase">
-        <span class="prompt-pulse"></span>
-        <span>EXPLORE ARCHITECTURE</span>
-      </a>
     </div>
   </section>
 
@@ -797,34 +789,45 @@
       <div class="diff-viewer-container card">
         <!-- Diff Controls Bar -->
         <div class="diff-toolbar">
-          <div class="diff-tabs" id="diff-tabs">
-            <button class="diff-tab-btn active" data-view="redacted-visual">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2" />
-                <circle cx="8.5" cy="8.5" r="1.5" />
-                <path d="M21 15l-5-5L5 21" />
-              </svg>
-              <span>Redacted Visual View (Tier 2)</span>
-            </button>
-            <button class="diff-tab-btn" data-view="ssg-json">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="16 18 22 12 16 6" />
-                <polyline points="8 6 2 12 8 18" />
-              </svg>
-              <span>Sanitized Screen Graph JSON (Tier 1 & 2)</span>
-            </button>
-            <button class="diff-tab-btn" data-view="ledger-entry">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-              </svg>
-              <span>LEKHA Signed Ledger Audit</span>
-            </button>
+          <div class="diff-tabs-wrapper">
+            <div class="diff-tabs-label-wrap">
+              <span class="diff-tabs-pulse"></span>
+              <span class="diff-tabs-label">SERVER EGRESS PAYLOAD:</span>
+            </div>
+            <div class="diff-tabs" id="diff-tabs" role="tablist" aria-label="Forensic Egress Views">
+              <button class="diff-tab-btn active" data-view="redacted-visual" role="tab" aria-selected="true" title="Switch to Redacted Visual Overlay View">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <path d="M21 15l-5-5L5 21" />
+                </svg>
+                <span class="tab-title">Redacted Visual</span>
+                <span class="tab-chip chip-tier2">TIER 2</span>
+              </button>
+
+              <button class="diff-tab-btn" data-view="ssg-json" role="tab" aria-selected="false" title="Switch to Sanitized Screen Graph JSON View">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="16 18 22 12 16 6" />
+                  <polyline points="8 6 2 12 8 18" />
+                </svg>
+                <span class="tab-title">SSG Wire Graph</span>
+                <span class="tab-chip chip-ssg">6 KB JSON</span>
+              </button>
+
+              <button class="diff-tab-btn" data-view="ledger-entry" role="tab" aria-selected="false" title="Switch to LEKHA Cryptographic Ledger Audit View">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+                <span class="tab-title">LEKHA Ledger</span>
+                <span class="tab-chip chip-lekha">ECDSA PROOF</span>
+              </button>
+            </div>
           </div>
 
-          <div class="diff-stats-pill">
+          <div class="diff-stats-pill" id="diff-stats-pill">
             <span class="indicator-dot-green"></span>
-            <span>Wire Payload: <strong>6.1 KB</strong> · Hash: <code>7f3a91c2...</code></span>
+            <span id="diff-stats-text">Wire Payload: <strong>6.1 KB</strong> · Hash: <code>7f3a91c2...</code></span>
           </div>
         </div>
 
@@ -846,7 +849,7 @@
                 <div class="portal-header">
                   <div class="emblem-placeholder">🏛️</div>
                   <div>
-                    <h4 class="portal-heading">Pradhan Mantri Kisan Samman Nidhi</h4>
+                    <h3 class="portal-heading">Pradhan Mantri Kisan Samman Nidhi</h3>
                     <p class="portal-sub">Department of Agriculture & Farmers Welfare · Government of India</p>
                   </div>
                 </div>
@@ -864,28 +867,28 @@
                     </div>
 
                     <div class="form-field-group">
-                      <label class="form-label">Full Name of Applicant</label>
-                      <input type="text" class="portal-input" value="Asha Devi Sharma" readonly>
+                      <label class="form-label" for="portal-applicant-name">Full Name of Applicant</label>
+                      <input type="text" id="portal-applicant-name" class="portal-input" value="Asha Devi Sharma" readonly>
 
-                      <label class="form-label" style="margin-top: 10px;">Date of Birth & Gender</label>
-                      <input type="text" class="portal-input" value="14/08/1992 · Female" readonly>
+                      <label class="form-label" for="portal-dob-gender" style="margin-top: 10px;">Date of Birth & Gender</label>
+                      <input type="text" id="portal-dob-gender" class="portal-input" value="14/08/1992 · Female" readonly>
                     </div>
                   </div>
 
                   <!-- Aadhaar & PAN -->
                   <div class="form-row form-grid-2">
                     <div class="form-field-group">
-                      <label class="form-label">Aadhaar Number (12 Digits)</label>
+                      <label class="form-label" for="portal-aadhaar">Aadhaar Number (12 Digits)</label>
                       <div class="input-highlight-container highlight-aadhaar">
-                        <input type="text" class="portal-input val-secret" value="5489 1243 9871" readonly>
+                        <input type="text" id="portal-aadhaar" class="portal-input val-secret" value="5489 1243 9871" readonly>
                         <span class="field-audit-tag">L1 Verhoeff: MATCH</span>
                       </div>
                     </div>
 
                     <div class="form-field-group">
-                      <label class="form-label">Permanent Account Number (PAN)</label>
+                      <label class="form-label" for="portal-pan">Permanent Account Number (PAN)</label>
                       <div class="input-highlight-container highlight-pan">
-                        <input type="text" class="portal-input val-secret" value="ABCPS1234K" readonly>
+                        <input type="text" id="portal-pan" class="portal-input val-secret" value="ABCPS1234K" readonly>
                         <span class="field-audit-tag">L1 4th Char P: Person</span>
                       </div>
                     </div>
@@ -894,12 +897,12 @@
                   <!-- Bank & Account -->
                   <div class="form-row form-grid-2">
                     <div class="form-field-group">
-                      <label class="form-label">Bank Account Number</label>
-                      <input type="text" class="portal-input val-secret" value="98234100234123" readonly>
+                      <label class="form-label" for="portal-bank-account">Bank Account Number</label>
+                      <input type="text" id="portal-bank-account" class="portal-input val-secret" value="98234100234123" readonly>
                     </div>
                     <div class="form-field-group">
-                      <label class="form-label">IFSC Code</label>
-                      <input type="text" class="portal-input" value="SBIN0001234" readonly>
+                      <label class="form-label" for="portal-ifsc">IFSC Code</label>
+                      <input type="text" id="portal-ifsc" class="portal-input" value="SBIN0001234" readonly>
                     </div>
                   </div>
 
@@ -929,7 +932,7 @@
                 <div class="portal-header">
                   <div class="emblem-placeholder">🏛️</div>
                   <div>
-                    <h4 class="portal-heading">Pradhan Mantri Kisan Samman Nidhi</h4>
+                    <h3 class="portal-heading">Pradhan Mantri Kisan Samman Nidhi</h3>
                     <p class="portal-sub">Department of Agriculture & Farmers Welfare · Government of India</p>
                   </div>
                 </div>
@@ -989,8 +992,8 @@
                       </div>
                     </div>
                     <div class="form-field-group">
-                      <label class="form-label">IFSC Code</label>
-                      <input type="text" class="portal-input" value="SBIN0001234" readonly style="background:#f8fafc;">
+                      <label class="form-label" for="portal-ifsc-redacted">IFSC Code</label>
+                      <input type="text" id="portal-ifsc-redacted" class="portal-input" value="SBIN0001234" readonly style="background:#f8fafc;">
                     </div>
                   </div>
 
@@ -1404,7 +1407,7 @@
 
       <!-- Monumental Typography -->
       <div class="footer-brand-monument">
-        <h1 class="monumental-text">PRAHARI</h1>
+        <div class="monumental-text">PRAHARI</div>
       </div>
     </div>
   </footer>
@@ -1416,7 +1419,7 @@
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
   <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
 
-  <script src="app.js?v=6.8"></script>
+  <script src="app.js?v=6.9"></script>
 </body>
 
 </html>

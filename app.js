@@ -106,26 +106,46 @@ document.addEventListener('DOMContentLoaded', () => {
   const diffTabs = document.querySelectorAll('.diff-tab-btn');
   const diffPanels = document.querySelectorAll('.diff-content-panel');
   const diffSubtitle = document.getElementById('diff-right-subtitle');
+  const diffStatsText = document.getElementById('diff-stats-text');
 
   const subtitles = {
-    'redacted-visual': 'Redacted Screen Overlay (Tier 2)',
-    'ssg-json': 'Sanitized Screen Graph JSON (Tier 1 & 2)',
-    'ledger-entry': 'LEKHA Cryptographic Ledger Record'
+    'redacted-visual': 'Redacted Screen Overlay (Tier 2 Visual)',
+    'ssg-json': 'Sanitized Screen Graph JSON (Tier 1 & 2 Wire)',
+    'ledger-entry': 'LEKHA Cryptographic Ledger Record (Tier 3 Audit)'
+  };
+
+  const statsPayloads = {
+    'redacted-visual': 'Wire Payload: <strong>6.1 KB</strong> · Mode: <code>Dual-Reality Visual</code>',
+    'ssg-json': 'Wire Payload: <strong>6.1 KB</strong> · Format: <code>SSG JSON (30× Smaller)</code>',
+    'ledger-entry': 'Audit Hash: <code>7f3a91c2...</code> · Signature: <code>secp256k1</code>'
   };
 
   diffTabs.forEach(tab => {
     tab.addEventListener('click', () => {
-      diffTabs.forEach(t => t.classList.remove('active'));
+      diffTabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
       diffPanels.forEach(p => p.classList.remove('active'));
 
       tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
       const targetView = tab.getAttribute('data-view');
       const activePanel = document.getElementById(`view-${targetView}`);
       if (activePanel) {
         activePanel.classList.add('active');
+        if (typeof gsap !== 'undefined') {
+          gsap.fromTo(activePanel, 
+            { opacity: 0, y: 8 }, 
+            { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }
+          );
+        }
       }
       if (diffSubtitle && subtitles[targetView]) {
         diffSubtitle.textContent = subtitles[targetView];
+      }
+      if (diffStatsText && statsPayloads[targetView]) {
+        diffStatsText.innerHTML = statsPayloads[targetView];
       }
     });
   });
@@ -272,8 +292,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const hero = document.querySelector('.hero');
     if (!hero) return;
 
-    const heroTitles = hero.querySelectorAll('.hero_row_text > h1');
-    const heroSubTitles = hero.querySelectorAll('.hero_row_text > h4');
+    const heroTitles = hero.querySelectorAll('.hero_row_text > h1, .hero_row_text > .hero_row_title');
+    const heroSubTitles = hero.querySelectorAll('.hero_row_text > h4, .hero_row_text > .hero_row_sub');
     const heroSeparators = hero.querySelectorAll('.hero_row_separator');
     const heroMedia = hero.querySelector('.hero_media');
     const riveCanvas = document.getElementById('hero-rive-canvas');
@@ -404,17 +424,6 @@ document.addEventListener('DOMContentLoaded', () => {
           0.25
         );
       }
-
-      // 4. Floating Explore Prompt reveals at hero baseline
-      const scrollPrompt = document.getElementById('hero-scroll-prompt');
-      if (scrollPrompt) {
-        heroRevealTimeline.fromTo(
-          scrollPrompt,
-          { autoAlpha: 0, y: 16 },
-          { duration: 0.85, autoAlpha: 1, y: 0, ease: 'power3.out' },
-          0.32
-        );
-      }
     };
 
     window.playHeroReveal = playHeroReveal;
@@ -431,10 +440,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const navToggler = document.getElementById('nav-toggler');
       if (preloaderExists && navToggler) {
         gsap.set(navToggler, { autoAlpha: 0, y: -20 });
-      }
-      const scrollPrompt = document.getElementById('hero-scroll-prompt');
-      if (preloaderExists && scrollPrompt) {
-        gsap.set(scrollPrompt, { autoAlpha: 0, y: 16 });
       }
 
       if (!preloaderExists) {
@@ -522,9 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const initObscuraMenu = () => {
     const menu = document.getElementById("obscura-menu");
     const menuBg = menu ? menu.querySelector(".menu-bg") : null;
-    const menuSubBar = menu ? menu.querySelector(".menu-sub-bar") : null;
     const menuItems = menu ? menu.querySelectorAll(".menu-item") : [];
-    const follower = document.getElementById("menu-cursor-follower");
     const navToggler = document.getElementById("nav-toggler");
     const curvePath = document.getElementById("menu-curve-path");
 
@@ -557,18 +560,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── 2. FLUID MAGNETIC SPOTLIGHT CURSOR & AMBIENT GLASS SPOTLIGHT ──
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
-    let posX = mouseX;
-    let posY = mouseY;
-    let cursorRaf = null;
-
-    const renderCursor = () => {
-      posX += (mouseX - posX) * 0.2;
-      posY += (mouseY - posY) * 0.2;
-      if (follower) {
-        follower.style.transform = `translate3d(${posX}px, ${posY}px, 0) translate(-50%, -50%)`;
-      }
-      cursorRaf = requestAnimationFrame(renderCursor);
-    };
 
     window.addEventListener("mousemove", (e) => {
       mouseX = e.clientX;
@@ -582,7 +573,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── 3. HOVER WAVE MOTION ON SPLIT CHARACTERS ──
     itemCharMaps.forEach(({ item, chars }) => {
       item.addEventListener("mouseenter", () => {
-        if (follower) follower.classList.add("is-hovering");
         if (typeof gsap !== "undefined") {
           gsap.killTweensOf(chars);
           gsap.to(chars, {
@@ -597,7 +587,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       item.addEventListener("mouseleave", () => {
-        if (follower) follower.classList.remove("is-hovering");
         if (typeof gsap !== "undefined") {
           gsap.killTweensOf(chars);
           gsap.to(chars, {
@@ -632,8 +621,6 @@ document.addEventListener('DOMContentLoaded', () => {
         onReverseComplete: () => {
           menu.classList.remove("is-menu-open");
           menu.style.pointerEvents = "";
-          if (cursorRaf) cancelAnimationFrame(cursorRaf);
-          cursorRaf = null;
         },
       });
 
@@ -775,12 +762,6 @@ document.addEventListener('DOMContentLoaded', () => {
       menu.style.pointerEvents = "auto";
       if (window.lenis) window.lenis.stop();
 
-      if (!cursorRaf) {
-        posX = mouseX;
-        posY = mouseY;
-        renderCursor();
-      }
-
       if (tl) tl.timeScale(1).play();
       flickerTextTo(navToggler, "Close");
     };
@@ -796,8 +777,6 @@ document.addEventListener('DOMContentLoaded', () => {
         menu.classList.remove("is-menu-open");
         menu.style.pointerEvents = "none";
         if (tl) tl.pause(0);
-        if (cursorRaf) cancelAnimationFrame(cursorRaf);
-        cursorRaf = null;
       } else {
         menu.style.pointerEvents = "none";
         tl.timeScale(2.4).reverse();
@@ -928,43 +907,40 @@ document.addEventListener('DOMContentLoaded', () => {
      18. STICKY CARDS SCROLL ANIMATION (GSAP + SCROLLTRIGGER)
      ========================================================================== */
   const initStickyCardsAnimation = () => {
-    const cardsContainer = document.querySelector("#pillars-cards");
-    const cards = gsap.utils.toArray("#pillars-cards .card");
-
-    if (!cardsContainer || !cards.length) return;
+    // Guard before use: if the GSAP CDN is blocked, gsap.utils.toArray below
+    // would throw a ReferenceError and take out every init that follows.
     if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
 
-    // Pin ALL Cards & Animate Card Stack Upward Shift
-    cards.forEach((card, index) => {
-      const isLastCard = index === cards.length - 1;
-      const cardInner = card.querySelector(".card-inner");
+    const cardsContainer = document.querySelector("#pillars-cards");
+    const cards = gsap.utils.toArray("#pillars-cards .card");
+    if (!cardsContainer || !cards.length) return;
 
-      // Pin EVERY card at top 12% until #problem section enters bottom of viewport
-      ScrollTrigger.create({
-        trigger: card,
-        start: "top 12%",
-        endTrigger: "#problem",
-        end: "top 90%",
-        pin: true,
-        pinSpacing: false,
-        invalidateOnRefresh: true,
+    // Stacking itself is native `position: sticky` (see .cards .card in
+    // styles.css) so it needs no measurement and cannot desync on refresh.
+    // GSAP only drives the header-exposure offset, and only above the 900px
+    // breakpoint - below it the cards are static and full-height, so shifting
+    // them would just misalign them. matchMedia reverts on resize.
+    gsap.matchMedia().add("(min-width: 901px)", () => {
+      cards.forEach((card, index) => {
+        const isLastCard = index === cards.length - 1;
+        const cardInner = card.querySelector(".card-inner");
+
+        // Translate cardInner upward for preceding cards to expose their headers
+        if (!isLastCard && cardInner) {
+          gsap.to(cardInner, {
+            y: `-${(cards.length - 1 - index) * 2.0}vh`,
+            ease: "none",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 12%",
+              endTrigger: "#problem",
+              end: "top 90%",
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          });
+        }
       });
-
-      // Translate cardInner upward for preceding cards to create header exposure
-      if (!isLastCard && cardInner) {
-        gsap.to(cardInner, {
-          y: `-${(cards.length - 1 - index) * 2.0}vh`,
-          ease: "none",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 12%",
-            endTrigger: "#problem",
-            end: "top 90%",
-            scrub: true,
-            invalidateOnRefresh: true,
-          },
-        });
-      }
     });
   };
 
@@ -973,15 +949,11 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ==========================================================================
      18b. SCROLLTRIGGER POSITION RECALCULATION (POST-LAYOUT-SHIFT)
      ========================================================================== */
-  // Pin start/end offsets are measured at init, before webfonts and images have
-  // settled. If the layout shifts afterwards, a card can be pinned (position:
-  // fixed) while the page is still at the top, which paints it over the hero.
+  // Scrub start/end offsets are measured at init, before webfonts and images
+  // have settled; re-measure once the layout is final so the scroll-linked
+  // animations line up with the content they are attached to.
   const initScrollTriggerRefresh = () => {
     if (typeof ScrollTrigger === "undefined") return;
-
-    // Never let the browser restore a mid-page scroll position: Lenis starts at
-    // 0, so a restored offset desynchronises every pin on reload.
-    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
     const refresh = () => ScrollTrigger.refresh();
 
