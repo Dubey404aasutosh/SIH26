@@ -509,7 +509,7 @@ body.is-menu-open>div:not(#obscura-menu):not(.nav-toggler) {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: clamp(0.38rem, 0.85vh, 0.75rem) 0;
+  padding: clamp(0.28rem, 0.65vh, 0.55rem) 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   user-select: none;
   position: relative;
@@ -537,10 +537,11 @@ body.is-menu-open>div:not(#obscura-menu):not(.nav-toggler) {
   transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
 }
 
-.menu-item:hover .item-key-badge {
+.menu-item:hover .item-key-badge,
+.menu-item.is-current .item-key-badge {
   color: #ff4d0a;
   border-color: rgba(255, 77, 10, 0.6);
-  background: rgba(255, 77, 10, 0.1);
+  background: rgba(255, 77, 10, 0.12);
 }
 
 .item-category-pill {
@@ -567,12 +568,14 @@ body.is-menu-open>div:not(#obscura-menu):not(.nav-toggler) {
   transition: transform 0.3s ease;
 }
 
-.menu-item:hover .item-category-pill {
+.menu-item:hover .item-category-pill,
+.menu-item.is-current .item-category-pill {
   opacity: 1;
   transform: translateX(0);
 }
 
-.menu-item:hover .pill-arrow {
+.menu-item:hover .pill-arrow,
+.menu-item.is-current .pill-arrow {
   transform: translate(2px, -2px);
 }
 
@@ -592,13 +595,14 @@ body.is-menu-open>div:not(#obscura-menu):not(.nav-toggler) {
   transition: opacity 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
-.menu-item:hover .item-stat-preview {
+.menu-item:hover .item-stat-preview,
+.menu-item.is-current .item-stat-preview {
   opacity: 1;
-  color: #ffffff;
+  color: #ff4d0a;
   transform: translateX(-6px);
 }
 
-/* Full-Width Gradient Underline on Hover */
+/* Full-Width Gradient Underline on Hover & Active */
 .menu-item::after {
   content: '';
   position: absolute;
@@ -614,14 +618,15 @@ body.is-menu-open>div:not(#obscura-menu):not(.nav-toggler) {
   pointer-events: none;
 }
 
-.menu-item:hover::after {
+.menu-item:hover::after,
+.menu-item.is-current::after {
   transform: scaleX(1);
 }
 
 .item-title {
   font-family: 'Syne', var(--font-sans);
   font-weight: 700;
-  font-size: clamp(2rem, 3.8vw, 3.8rem);
+  font-size: clamp(1.75rem, 3.2vw, 3.2rem);
   letter-spacing: -0.024em;
   line-height: 1.14;
   color: #f5f5f7;
@@ -632,9 +637,10 @@ body.is-menu-open>div:not(#obscura-menu):not(.nav-toggler) {
     transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.menu-item:hover .item-title {
+.menu-item:hover .item-title,
+.menu-item.is-current .item-title {
   color: #ffffff;
-  transform: translateX(14px);
+  transform: translateX(12px);
   text-shadow: 0 0 30px rgba(255, 255, 255, 0.4), 0 0 15px rgba(255, 77, 10, 0.3);
 }
 

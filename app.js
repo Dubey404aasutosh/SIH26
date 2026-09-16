@@ -700,12 +700,43 @@ document.addEventListener('DOMContentLoaded', () => {
       );
     }
 
-    // ── 7. TOGGLE STATE MANAGEMENT ──
+    // ── 7. TOGGLE STATE MANAGEMENT & ACTIVE ITEM SYNC ──
     let isMenuOpen = false;
+
+    const syncActiveMenuItem = () => {
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+      const vh = window.innerHeight;
+      let activeItem = null;
+
+      menuItems.forEach((item) => {
+        const href = item.getAttribute("href");
+        if (!href || href.startsWith("http")) return;
+        const target = document.querySelector(href);
+        if (!target) return;
+
+        const rect = target.getBoundingClientRect();
+        if (rect.top <= vh * 0.45 && rect.bottom >= vh * 0.15) {
+          activeItem = item;
+        }
+      });
+
+      if (!activeItem && scrollY < 250 && menuItems.length > 0) {
+        activeItem = menuItems[0];
+      }
+
+      menuItems.forEach((item) => {
+        if (item === activeItem) {
+          item.classList.add("is-current");
+        } else {
+          item.classList.remove("is-current");
+        }
+      });
+    };
 
     const openMenu = () => {
       if (isMenuOpen) return;
       isMenuOpen = true;
+      syncActiveMenuItem();
       menu.classList.add("is-menu-open");
       document.body.classList.add("is-menu-open");
       menu.setAttribute("aria-hidden", "false");
@@ -762,6 +793,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!href || href.startsWith("http")) return;
 
         e.preventDefault();
+        menuItems.forEach((i) => i.classList.remove("is-current"));
+        item.classList.add("is-current");
+
         closeMenu(false);
 
         setTimeout(() => {
@@ -797,6 +831,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (targetItem) {
           e.preventDefault();
           const href = targetItem.getAttribute("href");
+          menuItems.forEach((i) => i.classList.remove("is-current"));
+          targetItem.classList.add("is-current");
           closeMenu(false);
           setTimeout(() => {
             if (href) navigateToSection(href);
