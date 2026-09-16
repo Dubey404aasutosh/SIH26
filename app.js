@@ -191,42 +191,44 @@ document.addEventListener('DOMContentLoaded', () => {
   const canaryCounter = document.getElementById('canary-counter');
   let isRunningCanary = false;
 
-  btnRunCanary.addEventListener('click', () => {
-    if (isRunningCanary) return;
-    isRunningCanary = true;
-    btnRunCanary.disabled = true;
-    btnRunCanary.style.opacity = '0.6';
+  if (btnRunCanary) {
+    btnRunCanary.addEventListener('click', () => {
+      if (isRunningCanary) return;
+      isRunningCanary = true;
+      btnRunCanary.disabled = true;
+      btnRunCanary.style.opacity = '0.6';
 
-    let current = 0;
-    const total = 60;
-    canaryProgress.style.width = '0%';
-    canaryProgress.style.backgroundColor = 'var(--accent-blue)';
+      let current = 0;
+      const total = 60;
+      canaryProgress.style.width = '0%';
+      canaryProgress.style.backgroundColor = 'var(--accent-blue)';
 
-    const surfaces = [
-      'DOM text node', 'input value', 'placeholder', 'alt attribute',
-      'title attribute', 'aria-label', 'data-* attribute', 'canvas pixels',
-      'inside img', 'same-origin iframe', 'CSS ::after content', 'option text'
-    ];
+      const surfaces = [
+        'DOM text node', 'input value', 'placeholder', 'alt attribute',
+        'title attribute', 'aria-label', 'data-* attribute', 'canvas pixels',
+        'inside img', 'same-origin iframe', 'CSS ::after content', 'option text'
+      ];
 
-    const interval = setInterval(() => {
-      current++;
-      const surface = surfaces[current % surfaces.length];
-      const pct = (current / total) * 100;
-      canaryProgress.style.width = `${pct}%`;
-      canaryCounter.textContent = `${current} / ${total} Evaluated`;
-      canaryStatusText.textContent = `Testing canary in ${surface}... Clean.`;
+      const interval = setInterval(() => {
+        current++;
+        const surface = surfaces[current % surfaces.length];
+        const pct = (current / total) * 100;
+        canaryProgress.style.width = `${pct}%`;
+        canaryCounter.textContent = `${current} / ${total} Evaluated`;
+        canaryStatusText.textContent = `Testing canary in ${surface}... Clean.`;
 
-      if (current >= total) {
-        clearInterval(interval);
-        isRunningCanary = false;
-        canaryProgress.style.backgroundColor = 'var(--accent-green)';
-        canaryStatusText.innerHTML = `<strong class="text-success">COMPLETE: 0 / 60 Leaked.</strong> Zero PII discovered on wire.`;
-        btnRunCanary.disabled = false;
-        btnRunCanary.style.opacity = '1';
-        btnRunCanary.textContent = 'Re-Run Canary Suite';
-      }
-    }, 30);
-  });
+        if (current >= total) {
+          clearInterval(interval);
+          isRunningCanary = false;
+          canaryProgress.style.backgroundColor = 'var(--accent-green)';
+          canaryStatusText.innerHTML = `<strong class="text-success">COMPLETE: 0 / 60 Leaked.</strong> Zero PII discovered on wire.`;
+          btnRunCanary.disabled = false;
+          btnRunCanary.style.opacity = '1';
+          btnRunCanary.textContent = 'Re-Run Canary Suite';
+        }
+      }, 30);
+    });
+  }
 
   /* ==========================================================================
      9. JUDGE Q&A ACCORDION
@@ -1163,20 +1165,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 5. #benchmarks (Canary Stat Cards Stagger)
-    const benchmarkCards = document.querySelectorAll(".canary-stat-card");
-    benchmarkCards.forEach((card, idx) => {
-      card.classList.add("parallax-gpu");
-      gsap.to(card, {
-        y: -12 - (idx * 10),
-        ease: "none",
-        scrollTrigger: {
-          trigger: "#benchmarks",
-          start: "top 70%",
-          end: "bottom 20%",
-          scrub: 0.8,
-        },
+    if (document.getElementById("benchmarks")) {
+      const benchmarkCards = document.querySelectorAll(".canary-stat-card");
+      benchmarkCards.forEach((card, idx) => {
+        card.classList.add("parallax-gpu");
+        gsap.to(card, {
+          y: -12 - (idx * 10),
+          ease: "none",
+          scrollTrigger: {
+            trigger: "#benchmarks",
+            start: "top 70%",
+            end: "bottom 20%",
+            scrub: 0.8,
+          },
+        });
       });
-    });
+    }
 
     // ── E. INTERACTIVE 3D MOUSE PARALLAX & RAY-TRACED SHEEN ──
     const initMouseTilt = () => {
