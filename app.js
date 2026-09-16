@@ -140,47 +140,49 @@ document.addEventListener('DOMContentLoaded', () => {
   const checkItems = document.querySelectorAll('.check-item');
   let isLeakInjected = false;
 
-  btnInjectLeak.addEventListener('click', () => {
-    isLeakInjected = !isLeakInjected;
+  if (btnInjectLeak) {
+    btnInjectLeak.addEventListener('click', () => {
+      isLeakInjected = !isLeakInjected;
 
-    if (isLeakInjected) {
-      btnInjectLeak.innerHTML = '<span class="btn-icon">↺</span><span class="btn-label">Reset to Clean State</span>';
-      btnInjectLeak.className = 'btn btn-secondary btn-sm';
+      if (isLeakInjected) {
+        btnInjectLeak.innerHTML = '<span class="btn-icon">↺</span><span class="btn-label">Reset to Clean State</span>';
+        btnInjectLeak.className = 'btn btn-secondary btn-sm';
 
-      checkItems.forEach(item => {
-        if (item.getAttribute('data-check') === '2') {
-          item.className = 'check-item check-failed';
-          item.querySelector('.check-status-badge').textContent = '✗';
-        }
-      });
+        checkItems.forEach(item => {
+          if (item.getAttribute('data-check') === '2') {
+            item.className = 'check-item check-failed';
+            item.querySelector('.check-status-badge').textContent = '✗';
+          }
+        });
 
-      guardBanner.className = 'guard-output-banner banner-danger';
-      guardBanner.innerHTML = `
-        <div class="banner-icon">!</div>
-        <div>
-          <strong>BLOCKED BY EGRESS GUARD: CHECK #2 FAILED.</strong><br>
-          <span>Unredacted Aadhaar number detected during pre-transmission regex sweep. Transmission halted. Zero bytes left the machine.</span>
-        </div>
-      `;
-    } else {
-      btnInjectLeak.innerHTML = '<span class="btn-icon">⚡</span><span class="btn-label">Simulate PII Leak Attack</span>';
-      btnInjectLeak.className = 'btn btn-danger btn-sm';
+        guardBanner.className = 'guard-output-banner banner-danger';
+        guardBanner.innerHTML = `
+          <div class="banner-icon">!</div>
+          <div>
+            <strong>BLOCKED BY EGRESS GUARD: CHECK #2 FAILED.</strong><br>
+            <span>Unredacted Aadhaar number detected during pre-transmission regex sweep. Transmission halted. Zero bytes left the machine.</span>
+          </div>
+        `;
+      } else {
+        btnInjectLeak.innerHTML = '<span class="btn-icon">⚡</span><span class="btn-label">Simulate PII Leak Attack</span>';
+        btnInjectLeak.className = 'btn btn-danger btn-sm';
 
-      checkItems.forEach(item => {
-        item.className = 'check-item check-passed';
-        item.querySelector('.check-status-badge').textContent = '✓';
-      });
+        checkItems.forEach(item => {
+          item.className = 'check-item check-passed';
+          item.querySelector('.check-status-badge').textContent = '✓';
+        });
 
-      guardBanner.className = 'guard-output-banner banner-success';
-      guardBanner.innerHTML = `
-        <div class="banner-icon">✓</div>
-        <div>
-          <strong>EGRESS GUARD VERDICT: ALL 8 CHECKS PASSED.</strong><br>
-          <span>Payload verified clean. Request authorized for network dispatch.</span>
-        </div>
-      `;
-    }
-  });
+        guardBanner.className = 'guard-output-banner banner-success';
+        guardBanner.innerHTML = `
+          <div class="banner-icon">✓</div>
+          <div>
+            <strong>EGRESS GUARD VERDICT: ALL 8 CHECKS PASSED.</strong><br>
+            <span>Payload verified clean. Request authorized for network dispatch.</span>
+          </div>
+        `;
+      }
+    });
+  }
 
   /* ==========================================================================
      8. LIVE CANARY RUNNER (60 CHECKS)
@@ -337,76 +339,106 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Run GSAP Reveal Timeline
-    if (typeof gsap !== 'undefined') {
-      gsap.set(heroTitles, { y: '101%' });
-      gsap.set(heroSubTitles, { autoAlpha: 0 });
-      gsap.set(heroSeparators, { width: 0 });
-      if (riveCanvas) {
-        gsap.set(riveCanvas, { autoAlpha: 0 });
+    // Define the orchestrated Awwwards-Tier Hero Reveal animation
+    let heroRevealTimeline = null;
+    const playHeroReveal = () => {
+      if (heroRevealTimeline) {
+        heroRevealTimeline.play();
+        return;
       }
+      if (typeof gsap === 'undefined') return;
 
-      const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+      heroRevealTimeline = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
-      // Animate background Rive canvas in smoothly
+      // 1. Mascot unblurs and scales gracefully into place
       if (riveCanvas) {
-        tl.to(
+        heroRevealTimeline.fromTo(
           riveCanvas,
-          {
-            duration: 1.5,
-            autoAlpha: 1,
-            ease: 'power2.out',
-          },
+          { autoAlpha: 0.2, scale: 1.14 },
+          { duration: 1.5, autoAlpha: 1, scale: 1.0, ease: 'power3.out' },
           0
         );
       }
 
-      tl.to(
-        heroTitles,
-        {
-          duration: 1.75,
-          y: 0,
-          stagger: 0.055,
-        },
-        0
-      )
+      // 2. Monumental typographic rows unmask vertically with stagger
+      heroRevealTimeline
+        .to(
+          heroTitles,
+          {
+            duration: 1.35,
+            y: 0,
+            stagger: 0.075,
+            ease: 'power4.out',
+          },
+          0.05
+        )
         .to(
           heroSubTitles,
           {
-            duration: 1,
+            duration: 1.1,
             autoAlpha: 1,
-            ease: 'expo.in',
-            stagger: 0.055,
+            y: 0,
+            stagger: 0.075,
+            ease: 'power3.out',
           },
-          0
+          0.12
         )
         .to(
           heroSeparators,
           {
-            duration: 1.75,
+            duration: 1.35,
             width: '100%',
-            stagger: 0.095,
+            stagger: 0.08,
+            ease: 'power3.inOut',
           },
-          0
+          0.08
         );
 
-      const cells = hero.querySelectorAll('.cell');
-      if (cells.length > 0) {
-        tl.fromTo(
-          cells,
-          {
-            height: '0',
-            scale: 0.5,
-          },
-          {
-            duration: 1.25,
-            height: '100%',
-            scale: 1,
-            stagger: 0.025,
-            ease: 'expo.inOut',
-          },
-          0.5
+      // 3. Top-Right "Menu" button reveals into place
+      const navToggler = document.getElementById('nav-toggler');
+      if (navToggler) {
+        heroRevealTimeline.fromTo(
+          navToggler,
+          { autoAlpha: 0, y: -20 },
+          { duration: 0.8, autoAlpha: 1, y: 0, ease: 'power3.out' },
+          0.25
         );
+      }
+
+      // 4. Floating Explore Prompt reveals at hero baseline
+      const scrollPrompt = document.getElementById('hero-scroll-prompt');
+      if (scrollPrompt) {
+        heroRevealTimeline.fromTo(
+          scrollPrompt,
+          { autoAlpha: 0, y: 16 },
+          { duration: 0.85, autoAlpha: 1, y: 0, ease: 'power3.out' },
+          0.32
+        );
+      }
+    };
+
+    window.playHeroReveal = playHeroReveal;
+
+    // If preloader is present, set initial hero hidden states and wait; otherwise reveal immediately
+    const preloaderExists = document.getElementById('prahari-preloader');
+    if (typeof gsap !== 'undefined') {
+      gsap.set(heroTitles, { y: '105%' });
+      gsap.set(heroSubTitles, { autoAlpha: 0, y: 14 });
+      gsap.set(heroSeparators, { width: 0 });
+      if (riveCanvas) {
+        gsap.set(riveCanvas, { autoAlpha: 0, scale: 1.14 });
+      }
+      const navToggler = document.getElementById('nav-toggler');
+      if (preloaderExists && navToggler) {
+        gsap.set(navToggler, { autoAlpha: 0, y: -20 });
+      }
+      const scrollPrompt = document.getElementById('hero-scroll-prompt');
+      if (preloaderExists && scrollPrompt) {
+        gsap.set(scrollPrompt, { autoAlpha: 0, y: 16 });
+      }
+
+      if (!preloaderExists) {
+        playHeroReveal();
       }
     }
   };
@@ -1192,22 +1224,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // 3. #architecture (Device Card Elevation Parallax)
-    const heroDevice = document.querySelector(".hero-device-wrapper");
-    if (heroDevice) {
-      heroDevice.classList.add("parallax-gpu");
-      gsap.to(heroDevice, {
-        y: -24,
-        scale: 1.01,
-        ease: "none",
-        scrollTrigger: {
-          trigger: "#architecture",
-          start: "top 75%",
-          end: "bottom 25%",
-          scrub: 0.8,
-        },
-      });
-    }
 
     // 4. #egress-guard (Checklist Stagger Parallax)
     const egressItems = document.querySelectorAll(".check-item");
@@ -1451,5 +1467,115 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   initMonumentalFooterPhysics();
+
+  /* ==========================================================================
+     FAST PURE MOTION SVG PRELOADER CONTROLLER (#DA7644 FIELD)
+     ========================================================================== */
+  function initCinematicPreloader() {
+    const preloader = document.getElementById("prahari-preloader");
+    if (!preloader) return;
+
+    const stage = document.getElementById("preloader-stage");
+    const slicesTop = preloader.querySelectorAll(".preloader-slice-top");
+    const slicesBottom = preloader.querySelectorAll(".preloader-slice-bottom");
+
+    // Lock page scroll & pause Lenis while preloader runs
+    document.body.style.overflow = "hidden";
+    if (window.lenis) {
+      window.lenis.stop();
+    }
+
+    let isExited = false;
+
+    function completeAndExit() {
+      if (isExited) return;
+      isExited = true;
+
+      // Master Exit Reveal Timeline (Snappy & Award-Winning Aperture Split)
+      const exitTl = gsap.timeline({
+        onComplete: () => {
+          document.body.style.overflow = "";
+          if (window.lenis) {
+            window.lenis.start();
+          }
+          if (typeof ScrollTrigger !== "undefined") {
+            ScrollTrigger.refresh();
+          }
+          preloader.style.display = "none";
+          preloader.remove();
+        }
+      });
+
+      // 1. Central motion SVG scales gracefully with subtle optical defocus
+      if (stage) {
+        exitTl.to(stage, {
+          opacity: 0,
+          scale: 1.15,
+          filter: "blur(8px)",
+          duration: 0.35,
+          ease: "power2.out"
+        }, 0);
+      }
+
+      // 2. Kinetic multi-blade aperture curtain split
+      if (slicesTop.length > 0 && slicesBottom.length > 0) {
+        exitTl.to(slicesTop, {
+          yPercent: -102,
+          duration: 0.85,
+          stagger: {
+            amount: 0.22,
+            from: "center",
+            ease: "power2.inOut"
+          },
+          ease: "power4.inOut"
+        }, 0.1);
+
+        exitTl.to(slicesBottom, {
+          yPercent: 102,
+          duration: 0.85,
+          stagger: {
+            amount: 0.22,
+            from: "center",
+            ease: "power2.inOut"
+          },
+          ease: "power4.inOut"
+        }, 0.1);
+      } else {
+        exitTl.to(preloader, {
+          opacity: 0,
+          duration: 0.5,
+          ease: "power2.out"
+        }, 0.1);
+      }
+
+      // 3. Trigger coordinated Awwwards Hero Section Reveal
+      exitTl.call(() => {
+        if (typeof window.playHeroReveal === "function") {
+          window.playHeroReveal();
+        }
+      }, null, 0.16);
+    }
+
+    // Snappy auto-exit timer: ~1.18s (matching sped-up drawing cycle)
+    const timer = setTimeout(completeAndExit, 1180);
+
+    // Fast click-anywhere to skip
+    preloader.addEventListener("click", () => {
+      clearTimeout(timer);
+      completeAndExit();
+    });
+
+    // ESC or Space key to skip
+    window.addEventListener("keydown", function handleKey(e) {
+      if (!isExited && (e.key === "Escape" || e.key === " ")) {
+        window.removeEventListener("keydown", handleKey);
+        clearTimeout(timer);
+        completeAndExit();
+      }
+    });
+  }
+
+  initCinematicPreloader();
 });
+
 
