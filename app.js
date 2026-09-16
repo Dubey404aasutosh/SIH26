@@ -915,6 +915,7 @@ document.addEventListener('DOMContentLoaded', () => {
         end: "top 90%",
         pin: true,
         pinSpacing: false,
+        invalidateOnRefresh: true,
       });
 
       // Translate cardInner upward for preceding cards to create header exposure
@@ -928,6 +929,7 @@ document.addEventListener('DOMContentLoaded', () => {
             endTrigger: "#problem",
             end: "top 90%",
             scrub: true,
+            invalidateOnRefresh: true,
           },
         });
       }
@@ -935,6 +937,32 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   initStickyCardsAnimation();
+
+  /* ==========================================================================
+     18b. SCROLLTRIGGER POSITION RECALCULATION (POST-LAYOUT-SHIFT)
+     ========================================================================== */
+  // Pin start/end offsets are measured at init, before webfonts and images have
+  // settled. If the layout shifts afterwards, a card can be pinned (position:
+  // fixed) while the page is still at the top, which paints it over the hero.
+  const initScrollTriggerRefresh = () => {
+    if (typeof ScrollTrigger === "undefined") return;
+
+    // Never let the browser restore a mid-page scroll position: Lenis starts at
+    // 0, so a restored offset desynchronises every pin on reload.
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+    const refresh = () => ScrollTrigger.refresh();
+
+    window.addEventListener("load", refresh);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
+
+    // Images decoded after load (or any late layout shift) move pin boundaries.
+    document.querySelectorAll("img").forEach((img) => {
+      if (!img.complete) img.addEventListener("load", refresh, { once: true });
+    });
+  };
+
+  initScrollTriggerRefresh();
 
   /* ==========================================================================
      19. TOP 1% PARALLAX & 3D SPATIAL DEPTH ENGINE
